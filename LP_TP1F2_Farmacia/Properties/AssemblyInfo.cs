@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // As informações gerais sobre um assembly são controladas por
 // conjunto de atributos. Altere estes valores de atributo para modificar as informações
 // associada a um assembly.
-[assembly: AssemblyTitle("LP_TP1F1_Farmacia")]
+[assembly: AssemblyTitle("LP_TP1F2_Farmacia")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LP_TP1F1_Farmacia")]
+[assembly: AssemblyProduct("LP_TP1F2_Farmacia")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // O GUID a seguir será destinado à ID de typelib se este projeto for exposto para COM
-[assembly: Guid("34d9d1b4-5114-42e0-aabd-112f314ec44e")]
+[assembly: Guid("df8e66b7-c6e1-4ea7-ae7e-1446b1101899")]
 
 // As informações da versão de um assembly consistem nos quatro valores a seguir:
 //
