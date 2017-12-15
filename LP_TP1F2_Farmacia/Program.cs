@@ -81,19 +81,25 @@ namespace LP_TP1F2_Farmacia
     {
         private float dinheiro;
         private List<Receita> receitas;
+        private bool cartaoFarmacias;
+        private float conta;
 
         public float Dinheiro { get => dinheiro; set => dinheiro = value; }
         public List<Receita> Receitas { get => receitas; set => receitas = value; }
+        public bool CartaoFarmacias { get => cartaoFarmacias; set => cartaoFarmacias = value; }
+        public float Conta { get => conta; set => conta = value; }
 
-        public Cliente(float dinheiro, List<Receita> receitas, int id, string nome) : base(id, nome)
+        public Cliente(float dinheiro, List<Receita> receitas, bool cartaoFarmacias, float conta, int id, string nome) : base(id, nome)
         {
             this.dinheiro = dinheiro;
             this.receitas = receitas;
+            this.cartaoFarmacias = cartaoFarmacias;
+            this.conta = conta;
         }
 
         /// <summary>
         /// Recebe a farmácia e a lista de produtos encomendados
-        /// Soma o total a pagar dos produtos encomendados</summary>
+        /// Soma o total a pagar dos produtos encomendados
         /// Se o cliente tiver dinheiro paga, se não tiver aparece a respetiva mensagem
         /// <param name="farmacia"></param>
         /// <param name="encomenda"></param>
@@ -102,8 +108,42 @@ namespace LP_TP1F2_Farmacia
             float totalPagar = 0;
             foreach (Produto produto in encomenda)
             {
-                totalPagar += (produto.Preco * produto.Quantidade);
+                if (cartaoFarmacias == true)
+                {
+                    if((produto.SubCategoria== "AntiInflamatorio") ||(produto.SubCategoria== "AntiSeptico"))
+                    {
+                        float precoNovo = produto.Preco + (produto.Preco * 0.01f);
+                        totalPagar += ((precoNovo - (precoNovo * 0.05f)) * produto.Quantidade);
+                    }
+                    else if (produto.SubCategoria == "Injecao")
+                    {
+                        float precoNovo = produto.Preco + 1;
+                        totalPagar += ((precoNovo - (precoNovo * 0.05f)) * produto.Quantidade);
+                    }
+                    else
+                    {
+                        totalPagar += ((produto.Preco - (produto.Preco * 0.05f)) * produto.Quantidade);
+                    }
+                }
+                else
+                {
+                    if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
+                    {
+                        float precoNovo = produto.Preco + (produto.Preco * 0.01f);
+                        totalPagar += (precoNovo * produto.Quantidade);
+                    }
+                    else if (produto.SubCategoria == "Injecao")
+                    {
+                        float precoNovo = produto.Preco + 1;
+                        totalPagar += (precoNovo * produto.Quantidade);
+                    }
+                    else
+                    {
+                        totalPagar += (produto.Preco * produto.Quantidade);
+                    }
+                }
             }
+            //criar vendas com preços modificados a partir das regras acima
             if (dinheiro >= totalPagar)
             {
                 foreach (Produto produto in encomenda)
@@ -120,7 +160,85 @@ namespace LP_TP1F2_Farmacia
             }
             else
             {
-                Console.WriteLine("\nCompra não efetuada com sucesso. Não tem dinheiro suficiente.");
+                Console.WriteLine("\nNão tem dinheiro suficiente.\nDeseja adicionar á conta ou cancelar a compra? (0 - Adicionar á conta | 1 - Cancelar)");
+                string pagarCancelar = Console.ReadLine();
+                int pagarCancelarInt = Int32.Parse(pagarCancelar);
+                if (pagarCancelarInt == 0)
+                {
+                    adicionarConta(farmacia, encomenda);
+                }
+                else
+                {
+                    Console.WriteLine("\nCompra cancelada com sucesso!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recebe a farmácia e a lista de produtos encomendados
+        /// Soma o total a pagar dos produtos encomendados
+        /// Se a conta do cliente não exceder os 50€ a venda é criada e adicionado o valor é conta, senão o cliente paga na hora ou cancela
+        /// </summary>
+        /// <param name="farmacia"></param>
+        /// <param name="encomenda"></param>
+        public void adicionarConta(Farmacia farmacia, List<Produto> encomenda)
+        {
+            float totalPagar = 0;
+            foreach (Produto produto in encomenda)
+            {
+                if (cartaoFarmacias == true)
+                {
+                    totalPagar += ((produto.Preco - (produto.Preco * 0.05f)) * produto.Quantidade);
+                }
+                else
+                {
+                    totalPagar += (produto.Preco * produto.Quantidade);
+                }
+            }
+            if((conta + totalPagar) < 50)
+            {
+                foreach (Produto produto in encomenda)
+                {
+                    farmacia.retiraDoStock(produto.Id, produto.Quantidade);
+                }
+                conta += totalPagar;
+                farmacia.ContadorVentas++;
+                Venda venda = new Venda(farmacia.ContadorVentas, id, encomenda, totalPagar, false);
+                farmacia.Vendas.Add(venda);
+                Console.WriteLine("\nCompra adicionada com sucesso á conta.");
+                Console.WriteLine("O seu código de venda é: " + farmacia.ContadorVentas);
+            }
+            else
+            {
+                Console.WriteLine("\nNão pode adicionar á conta porque a mesma excede os 50 euros.\nDeseja pagar agora ou cancelar a compra? (0 - Pagar agora | 1 - Cancelar)");
+                string pagarCancelar = Console.ReadLine();
+                int pagarCancelarInt = Int32.Parse(pagarCancelar);
+                if (pagarCancelarInt == 0)
+                {
+                    pagar(farmacia, encomenda);
+                }
+                else
+                {
+                    Console.WriteLine("\nCompra cancelada com sucesso!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Paga o valor que o cliente tem em conta (caso tenha dinheiro para tal)
+        /// </summary>
+        /// <param name="farmacia"></param>
+        public void pagarConta(Farmacia farmacia)
+        {
+            if (dinheiro >= conta)
+            {
+                farmacia.Dinheiro += conta;
+                dinheiro -= conta;
+                conta = 0;
+            }
+            else
+            {
+                Console.WriteLine("\nNão tem dinheiro para pagar o que deve!");
             }
         }
     }
@@ -414,7 +532,7 @@ namespace LP_TP1F2_Farmacia
 
             Produto prod1Receita = new Produto(1, "Benuron", 5.0f, 2, true, data, "Opiácio", "M", "Opiacio");
             Produto prod2Receita = new Produto(3, "Antiflan", 7.0f, 2, true, data, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod3Receita = new Produto(5, "Vacina", 9.0f, 100, true, data, "Injeções", "M", "Injecoes");
+            Produto prod3Receita = new Produto(5, "Vacina", 9.0f, 100, true, data, "Injeções", "M", "Injecao");
             Produto prod4Receita = new Produto(7, "Colgate", 11.0f, 100, false, data, "Pasta de Dentes", "HA", "Higiene");
             Produto prod5Receita = new Produto(9, "Papa s/ Glúten", 13.0f, 100, false, data, "Papa sem Glúten", "HA", "Alimentar");
             Produto prod6Receita = new Produto(11, "Scalibor", 15.0f, 100, false, data, "Desparazitante de animal", "HA", "Animal");
@@ -431,9 +549,9 @@ namespace LP_TP1F2_Farmacia
             List<Receita> receitas = new List<Receita>();
             receitas.Add(receita);
 
-            Cliente clie1 = new Cliente(100.0f, receitas, 1, "Rebeca");
-            Cliente clie2 = new Cliente(200.0f, receitas, 2, "Toninha");
-            Cliente clie3 = new Cliente(300.0f, receitas, 3, "Ramira");
+            Cliente clie1 = new Cliente(100.0f, receitas, true, 0, 1, "Rebeca");
+            Cliente clie2 = new Cliente(200.0f, receitas, false, 0, 2, "Toninha");
+            Cliente clie3 = new Cliente(300.0f, receitas, false, 0, 3, "Ramira");
             List<Cliente> clientes = new List<Cliente>();
             clientes.Add(clie1);
             clientes.Add(clie2);
@@ -505,6 +623,10 @@ namespace LP_TP1F2_Farmacia
             {
                 Console.Clear();
                 Console.WriteLine("Bem-vindo à Farmácia WellSir");
+                if (clienteAtual != null)
+                {
+                    Console.WriteLine("\nValor a dever: " + clienteAtual.Conta + " euros\nVá para a opção 100 para pagar o que deve.");
+                }
                 Console.WriteLine("\n----------MENU----------");
                 Console.WriteLine("\nEscolha uma opção:");
                 Console.WriteLine("1 - Comprar medicamentos");
@@ -531,7 +653,7 @@ namespace LP_TP1F2_Farmacia
                                 bool acabou1 = false;
                                 while (!acabou1)
                                 {
-                                    farmacia.mostrarMedicamentos();  //Mostrar todos os medicamentos
+                                    farmacia.mostrarMedicamentos();
                                     Console.Write("\nIntroduza o código do produto que quer comprar (0 para finalizar a compra): ");
                                     string idProduto = Console.ReadLine();
                                     int idProdutoInt = Int32.Parse(idProduto);
@@ -540,7 +662,7 @@ namespace LP_TP1F2_Farmacia
                                         Console.Write("Introduza a quantidade do produto que quer comprar: ");
                                         string quantidadeProduto = Console.ReadLine();
                                         int quantidadeProdutoInt = Int32.Parse(quantidadeProduto);
-                                        if (farmacia.existeQuantidade(idProdutoInt, quantidadeProdutoInt)) //Verificar se existem as quantidades do medicamento pedido
+                                        if (farmacia.existeQuantidade(idProdutoInt, quantidadeProdutoInt))
                                         {
                                             Produto prod = farmacia.obterProduto(idProdutoInt);
                                             Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, quantidadeProdutoInt, prod.Comparticipacao, prod.Validade, prod.Descrição, prod.Categoria, prod.SubCategoria);
@@ -567,13 +689,36 @@ namespace LP_TP1F2_Farmacia
                                         acabou1 = true;
                                     }
                                 }
-                                clienteAtual.pagar(farmacia, encomenda);  //Pagar medicamentos
+                                Console.Write("Quer pagar agora ou deixar na conta? (0 - Pagar Agora | 1 - Deixar na conta): ");
+                                string tipoPagamento = Console.ReadLine();
+                                int tipoPagamentoInt = Int32.Parse(tipoPagamento);
+                                if (tipoPagamentoInt == 0)
+                                {
+                                    //Adicionar á fila de atendimento
+                                    clienteAtual.pagar(farmacia, encomenda);
+                                }
+                                else
+                                {
+                                    //Adicionar á fila de atendimento
+                                    clienteAtual.adicionarConta(farmacia, encomenda);
+                                }
                             }
                             while (Console.KeyAvailable)
                             {
                                 Console.ReadKey(false);
                             }
                             Console.ReadKey();
+                            break;
+                        }
+                    case "100":
+                        {
+                            clienteAtual.pagarConta(farmacia);
+                            break;
+                        }
+                    case "0":
+                        {
+                            Console.WriteLine("\nMuito obrigado pela sua preferência!");
+                            acabou = true;
                             break;
                         }
                 }
