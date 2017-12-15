@@ -6,36 +6,25 @@ using System.Threading.Tasks;
 
 /*
     Criar elementos para representar:
-    - Funcionários e Clientes;
-    - Medicamentos {Opiáceos, Anti-Inflamatórios, Anti-Sépticos, Orais, Cutâneos, ...};
-    - Produtos de Higiene {champô, pasta dentífrica, produtos-antialergénicos}
-    - Produtos de beleza {cremes de rosto, mãos, pés, hidratantes, de noite, de dia, maquilhagem}
     - Receita;
 
     Ações da Farmácia:
     - Respeitar a fila de atendimento;
-    - Comprar medicamentos e outros produtos;
     - Verificar e Levantar a receita;
-    - Encomendar medicamentos;
     - Verificar validades.
 
     Detalhes:
     Criar as classes, variáveis e structs necessárias para modelar:
-    - Funcionários que tem um nome e id. O chefe tem para além disso a função de comprar e repor os stocks.
-    - Clientes com nome, dinheiro e podendo ter nenhuma ou várias receitas. Para além disso podem ter ou não um cartão das 
-    farmácias portuguesas que lhe conferem a possibilidade de ter descontos de 5%. Para além disso existe a categoria de 
-    clientes habituais que quando pagarem podem deixar na conta (com limite de 50 €);
-    - Medicamentos que tem um nome, quantidade, preço e validade. Existem depois os vários tipos de medicamentos:
-        - opiáceos que só podem ser levantados ao máximo 5 por semana (se na receita forem receitados 20, quer dizer que só 
-        ao fim de 4 semanas aquela  parte da receita pode ser de facto levantada totalmente);
-        - Anti-inflamatórios e anti-sépticos tem uma taxa de 1% a acrescer ao preço normal;
-        - Injeções que possuem um preço acrescido de 1€ por trazerem uma agulha esterilizada.
-    - Produtos de Higiene e Alimentares que tem nome, quantidade, preço e descrição.
-    Os vários produtos são:
-        - Champôs e Pastas dentífricas que têm uma taxa de 13%;
-        - Produtos hipoalergénicos (papas sem glúten, sem amido) com taxas a 6%
-        - Produtos 100% naturais para animais (taxa adicional de 1€ por compra para a causa “Salvem as ratazanas de 
-        laboratório”)
+    - Funcionários: o chefe tem para além disso a função de comprar e repor os stocks.
+    - Medicamentos:
+        Existem depois os vários tipos de medicamentos:
+            - opiáceos que só podem ser levantados ao máximo 5 por semana (se na receita forem receitados 20, quer dizer que
+            só ao fim de 4 semanas aquela  parte da receita pode ser de facto levantada totalmente);
+    - Produtos de Higiene e Alimentares:
+        Os vários produtos são:
+            - Produtos hipoalergénicos (papas sem glúten, sem amido) com taxas a 6%
+            - Produtos 100% naturais para animais (taxa adicional de 1€ por compra para a causa “Salvem as ratazanas de 
+            laboratório”)
     - Produtos de beleza que são variados e que possuem também nome, quantidade e preço mas cuja taxa é de 23% de iva.
     - Receita que é basicamente uma lista de medicamentos e quantidades mas que só acaba quando todos os medicamentos forem 
     levantados;
@@ -99,7 +88,7 @@ namespace LP_TP1F2_Farmacia
 
         /// <summary>
         /// Recebe a farmácia e a lista de produtos encomendados
-        /// Soma o total a pagar dos produtos encomendados
+        /// Soma o total a pagar dos produtos encomendados e adiciona as respetivas taxas
         /// Se o cliente tiver dinheiro paga, se não tiver aparece a respetiva mensagem
         /// <param name="farmacia"></param>
         /// <param name="encomenda"></param>
@@ -112,30 +101,41 @@ namespace LP_TP1F2_Farmacia
                 {
                     if((produto.SubCategoria== "AntiInflamatorio") ||(produto.SubCategoria== "AntiSeptico"))
                     {
-                        float precoNovo = produto.Preco + (produto.Preco * 0.01f);
-                        totalPagar += ((precoNovo - (precoNovo * 0.05f)) * produto.Quantidade);
+                        produto.Preco += (produto.Preco * 0.01f);
+                        totalPagar += ((produto.Preco - (produto.Preco * 0.05f)) * produto.Quantidade);
                     }
                     else if (produto.SubCategoria == "Injecao")
                     {
-                        float precoNovo = produto.Preco + 1;
-                        totalPagar += ((precoNovo - (precoNovo * 0.05f)) * produto.Quantidade);
+                        produto.Preco += 1;
+                        totalPagar += ((produto.Preco - (produto.Preco * 0.05f)) * produto.Quantidade);
+                    }
+                    else if (produto.SubCategoria == "Higiene")
+                    {
+                        produto.Preco += (produto.Preco * 0.13f);
+                        totalPagar += ((produto.Preco - (produto.Preco * 0.05f)) * produto.Quantidade);
                     }
                     else
                     {
                         totalPagar += ((produto.Preco - (produto.Preco * 0.05f)) * produto.Quantidade);
                     }
+                    //Fazer taxas em produtos hipoalergénicos e animais
                 }
                 else
                 {
                     if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
                     {
-                        float precoNovo = produto.Preco + (produto.Preco * 0.01f);
-                        totalPagar += (precoNovo * produto.Quantidade);
+                        produto.Preco += (produto.Preco * 0.01f);
+                        totalPagar += (produto.Preco * produto.Quantidade);
                     }
                     else if (produto.SubCategoria == "Injecao")
                     {
-                        float precoNovo = produto.Preco + 1;
-                        totalPagar += (precoNovo * produto.Quantidade);
+                        produto.Preco += 1;
+                        totalPagar += (produto.Preco * produto.Quantidade);
+                    }
+                    else if (produto.SubCategoria == "Higiene")
+                    {
+                        produto.Preco += (produto.Preco * 0.13f);
+                        totalPagar += (produto.Preco * produto.Quantidade);
                     }
                     else
                     {
@@ -143,7 +143,6 @@ namespace LP_TP1F2_Farmacia
                     }
                 }
             }
-            //criar vendas com preços modificados a partir das regras acima
             if (dinheiro >= totalPagar)
             {
                 foreach (Produto produto in encomenda)
@@ -503,8 +502,8 @@ namespace LP_TP1F2_Farmacia
             Produto prod2 = new Produto(2, "Brufen", 6.0f, 100, true, data, "Opiácio", "M", "Opiacio");
             Produto prod3 = new Produto(3, "Antiflan", 7.0f, 100, true, data, "Anti-Inflamatório", "M", "AntiInflamatorio");
             Produto prod4 = new Produto(4, "Ceprofen", 8.0f, 100, true, data, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod5 = new Produto(5, "Vacina", 9.0f, 100, true, data, "Injeções", "M", "Injecoes");
-            Produto prod6 = new Produto(6, "Noregyna", 10.0f, 100, true, data, "Injeções", "M", "Injecoes");
+            Produto prod5 = new Produto(5, "Vacina", 9.0f, 100, true, data, "Injeções", "M", "Injecao");
+            Produto prod6 = new Produto(6, "Noregyna", 10.0f, 100, true, data, "Injeções", "M", "Injecao");
             Produto prod7 = new Produto(7, "Colgate", 11.0f, 100, false, data, "Pasta de Dentes", "HA", "Higiene");
             Produto prod8 = new Produto(8, "Linic", 12.0f, 100, false, data, "Champô", "HA", "Higiene");
             Produto prod9 = new Produto(9, "Papa s/ Glúten", 13.0f, 100, false, data, "Papa sem Glúten", "HA", "Alimentar");
