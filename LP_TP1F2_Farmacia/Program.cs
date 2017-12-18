@@ -20,15 +20,13 @@ using System.Threading.Tasks;
         Existem depois os vários tipos de medicamentos:
             - opiáceos que só podem ser levantados ao máximo 5 por semana (se na receita forem receitados 20, quer dizer que
             só ao fim de 4 semanas aquela  parte da receita pode ser de facto levantada totalmente);
-    - Receita que é basicamente uma lista de medicamentos e quantidades mas que só acaba quando todos os medicamentos forem 
-    levantados;
+    - Receita que é basicamente mas que só acaba quando todos os medicamentos forem levantados;
     - Todos os dados têm de ser carregados a partir de ficheiros. Como tal também devem haver métodos que permitam guardar 
     os dados em ficheiros;
     - A farmácia tem de ter um valor de tempo para poder comparar com o tempo das validades dos produtos (medicamentos 
     apenas, os outros são vitalícios)
     - Tem de ser estabelecidas filas para atender os clientes.
     - Os menus devem refletir tanto a parte de se ser cliente como de se ser funcionário.
-    - Saber o valor dos produtos por tipo (valor dos opiáceos, dos produtos de beleza, ...)
 */
 
 namespace LP_TP1F2_Farmacia
@@ -518,7 +516,7 @@ namespace LP_TP1F2_Farmacia
         /// <summary>
         /// Lista todos os produtos em stock
         /// </summary>
-        public void mostrarMedicamentos()
+        public void mostrarProdutos()
         {
             Console.Clear();
             Console.WriteLine("Lista de produtos:\n");
@@ -534,14 +532,14 @@ namespace LP_TP1F2_Farmacia
         /// <summary>
         /// Verifica se um determinado produto existe
         /// </summary>
-        /// <param name="idMedicamento">Int dom o Id do Medicamento que vai ser testado</param>
+        /// <param name="idProduto">Int dom o Id do Produto que vai ser testado</param>
         /// <returns>Bool onde 1 - Existe e 0 - Não existe</returns>
-        public bool existeMedicamento(int idMedicamento)
+        public bool existeProduto(int idProduto)
         {
             bool existe = false;
             foreach (Produto produto in produtos)
             {
-                if (idMedicamento == produto.Id)
+                if (idProduto == produto.Id)
                 {
                     existe = true;
                     break;
@@ -559,7 +557,7 @@ namespace LP_TP1F2_Farmacia
         public bool existeQuantidade(int idMedicamento, int quantidade)
         {
             bool existe = false;
-            if (existeMedicamento(idMedicamento))
+            if (existeProduto(idMedicamento))
             {
                 foreach (Produto produto in produtos)
                 {
@@ -632,16 +630,16 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Lista os medicamentos guardados numa venda
+        /// Lista os produtos guardados numa venda
         /// </summary>
-        /// <param name="idVenda">Int com o Id da Venda cujos medicamentos vão ser listados</param>
-        public void mostrarMedicamentosDaVenda(int idVenda)
+        /// <param name="idVenda">Int com o Id da Venda cujos produtos vão ser listados</param>
+        public void mostrarProdutosDaVenda(int idVenda)
         {
             Venda venda = obterVenda(idVenda);
             if (existeVenda(idVenda))
             {
                 Console.Clear();
-                Console.WriteLine("Lista de medicamentos:\n");
+                Console.WriteLine("Lista de produtos:\n");
                 foreach (Produto produto in venda.Produtos)
                 {
                     Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros - " + produto.Quantidade);
@@ -698,6 +696,89 @@ namespace LP_TP1F2_Farmacia
         public void reporStock(Produto produto, int quantidadeAdicionar)
         {
             produto.Quantidade += quantidadeAdicionar;
+        }
+
+        /// <summary>
+        /// Percorre os produtos da farmácia e calcula o valor total do stock
+        /// </summary>
+        /// <returns>float com o valor total do stock da farmácia</returns>
+        public float totalProdutos()
+        {
+            float totalProdutos = 0;
+            foreach (Produto produto in produtos)
+            {
+                totalProdutos += (produto.Preco * produto.Quantidade);
+            }
+            return totalProdutos;
+        }
+
+        /// <summary>
+        /// Percorre os produtos da farmácia e calcula o valor total do stock de cada tipo
+        /// </summary>
+        public void totalProdutosPorTipo()
+        {
+            float totalOpiacio = 0, totalAntiInflamatorio = 0, totalInjecao = 0, totalHigiene = 0, totalHipoalergenico = 0, totalAnimal = 0, totalBeleza = 0;
+            foreach(Produto produto in produtos)
+            {
+                switch (produto.SubCategoria)
+                {
+                    case "Opiacio":
+                        {
+                            totalOpiacio += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                    case "AntiInflamatorio":
+                        {
+                            totalAntiInflamatorio += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                    case "Injecao":
+                        {
+                            totalInjecao += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                    case "Higiene":
+                        {
+                            totalHigiene += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                    case "Hipoalergenico":
+                        {
+                            totalHipoalergenico += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                    case "Animal":
+                        {
+                            totalAnimal += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                    case "Beleza":
+                        {
+                            totalBeleza += produto.Preco * produto.Quantidade;
+                            break;
+                        }
+                }
+            }
+            Console.WriteLine("A farmácia tem " + totalOpiacio + " euros em stock de produtos opiácios.");
+            Console.WriteLine("A farmácia tem " + totalAntiInflamatorio + " euros em stock de produtos anti-inflamatórios.");
+            Console.WriteLine("A farmácia tem " + totalInjecao + " euros em stock de produtos de injeções.");
+            Console.WriteLine("A farmácia tem " + totalHigiene + " euros em stock de produtos hijiene.");
+            Console.WriteLine("A farmácia tem " + totalHipoalergenico + " euros em stock de produtos hipoalergénicos.");
+            Console.WriteLine("A farmácia tem " + totalAnimal + " euros em stock de produtos para animais.");
+            Console.WriteLine("A farmácia tem " + totalBeleza + " euros em stock de produtos de beleza.");
+        }
+
+        /// <summary>
+        /// Lista todos os produtos (mesmo que não existam em stock)
+        /// </summary>
+        public void mostrarTodosProdutos()
+        {
+            Console.Clear();
+            Console.WriteLine("Lista de produtos:\n");
+            foreach (Produto produto in produtos)
+            {
+                Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros" + " - " + produto.Validade.ToString("d") + " - " + produto.Quantidade + " unidades");
+            }
         }
     }
 
@@ -871,9 +952,9 @@ namespace LP_TP1F2_Farmacia
                 Console.WriteLine("\nEscolha uma opção:");
                 Console.WriteLine("1 - Comprar produtos");
                 Console.WriteLine("2 - Mostrar receita");
-                Console.WriteLine("3 - Procurar e verificar se existem medicamentos");
-                Console.WriteLine("4 - Devolver medicamentos");
-                Console.WriteLine("5 - Mostrar valor total em medicamentos");
+                Console.WriteLine("3 - Procurar e verificar se existem produtos");
+                Console.WriteLine("4 - Devolver produtos");
+                Console.WriteLine("5 - Mostrar valor total em produtos no stock");
                 Console.WriteLine("6 - Repor stock");
                 Console.WriteLine("0 - SAIR");
                 Console.Write("\nA sua opção: ");
@@ -893,7 +974,7 @@ namespace LP_TP1F2_Farmacia
                                 bool acabou1 = false;
                                 while (!acabou1)
                                 {
-                                    farmacia.mostrarMedicamentos();
+                                    farmacia.mostrarProdutos();
                                     Console.Write("\nIntroduza o código do produto que quer comprar (0 para finalizar a compra): ");
                                     string idProduto = Console.ReadLine();
                                     int idProdutoInt = Int32.Parse(idProduto);
@@ -1005,7 +1086,7 @@ namespace LP_TP1F2_Farmacia
                     case "3":
                         {
                             Console.Clear();
-                            farmacia.mostrarMedicamentos();
+                            farmacia.mostrarProdutos();
                             while (Console.KeyAvailable)
                             {
                                 Console.ReadKey(false);
@@ -1034,7 +1115,7 @@ namespace LP_TP1F2_Farmacia
                                         List<Produto> devolucao = new List<Produto>();
                                         while (!acabou1)
                                         {
-                                            farmacia.mostrarMedicamentosDaVenda(codVendaInt);
+                                            farmacia.mostrarProdutosDaVenda(codVendaInt);
                                             Console.Write("\nIntroduza o código do produto que quer devolver (0 para finalizar a devolução): ");
                                             string codigoProduto = Console.ReadLine();
                                             int codigoProdutoInt = Int32.Parse(codigoProduto);
@@ -1091,7 +1172,67 @@ namespace LP_TP1F2_Farmacia
                             Console.ReadKey();
                             break;
                         }
-                    //PROX CASE
+                    case "5":
+                        {
+                            Console.Clear();
+                            if (funcionarioAtual == null)
+                            {
+                                Console.WriteLine("Não tem permissão para usar esta função.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("A farmácia tem " + farmacia.totalProdutos() + " euros em stock de produtos.");
+                                farmacia.totalProdutosPorTipo();
+                            }
+                            while (Console.KeyAvailable)
+                            {
+                                Console.ReadKey(false);
+                            }
+                            Console.ReadKey();
+                            break;
+                        }
+                    case "6":
+                        {
+                            Console.Clear();
+                            if ((funcionarioAtual == null) || (funcionarioAtual.Tipo != "Chefe"))
+                            {
+                                Console.WriteLine("Não tem permissão para usar esta função.");
+                            }
+                            else
+                            {
+                                bool acabou1 = false;
+                                while (!acabou1)
+                                {
+                                    farmacia.mostrarTodosProdutos();
+                                    Console.Write("\nIntroduza o código do produto que quer repor (0 para finalizar a reposição): ");
+                                    string codigoProduto = Console.ReadLine();
+                                    int codigocodigoProdutoInt = Int32.Parse(codigoProduto);
+                                    if (codigocodigoProdutoInt != 0)
+                                    {
+                                        Console.Write("Introduza a quantidade a adicionar: ");
+                                        string quantidade = Console.ReadLine();
+                                        int quantidadeInt = Int32.Parse(quantidade);
+                                        farmacia.reporStock(farmacia.obterProduto(codigocodigoProdutoInt), quantidadeInt);
+                                        Console.WriteLine("\nProduto adicionado com sucesso ao stock.");
+                                        while (Console.KeyAvailable)
+                                        {
+                                            Console.ReadKey(false);
+                                        }
+                                        Console.ReadKey();
+                                    }
+                                    else
+                                    {
+                                        acabou1 = true;
+                                    }
+                                }
+                            }
+                            while (Console.KeyAvailable)
+                            {
+                                Console.ReadKey(false);
+                            }
+                            Console.ReadKey();
+                            break;
+                        }
                     case "100":
                         {
                             clienteAtual.pagarConta(farmacia);
