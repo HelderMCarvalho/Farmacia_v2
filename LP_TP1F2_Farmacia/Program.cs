@@ -5,17 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 /*
-    Criar elementos para representar:
-    - Receita;
-
     Ações da Farmácia:
     - Respeitar a fila de atendimento;
-    - Verificar e Levantar a receita;
     - Verificar validades.
 
     Detalhes:
     Criar as classes, variáveis e structs necessárias para modelar:
-    - Funcionários: o chefe tem para além disso a função de comprar e repor os stocks.
     - Medicamentos:
         Existem depois os vários tipos de medicamentos:
             - opiáceos que só podem ser levantados ao máximo 5 por semana (se na receita forem receitados 20, quer dizer que
@@ -23,10 +18,7 @@ using System.Threading.Tasks;
     - Receita que é basicamente mas que só acaba quando todos os medicamentos forem levantados;
     - Todos os dados têm de ser carregados a partir de ficheiros. Como tal também devem haver métodos que permitam guardar 
     os dados em ficheiros;
-    - A farmácia tem de ter um valor de tempo para poder comparar com o tempo das validades dos produtos (medicamentos 
-    apenas, os outros são vitalícios)
     - Tem de ser estabelecidas filas para atender os clientes.
-    - Os menus devem refletir tanto a parte de se ser cliente como de se ser funcionário.
 */
 
 namespace LP_TP1F2_Farmacia
@@ -48,7 +40,7 @@ namespace LP_TP1F2_Farmacia
 
     class Funcionario : Pessoa
     {
-        private string tipo; /*Chefe ou Base*/
+        private string tipo; //Chefe ou Base
 
         public string Tipo { get => tipo; set => tipo = value; }
 
@@ -82,12 +74,12 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe a farmácia e a lista de produtos encomendados
-        /// Soma o total a pagar dos produtos encomendados e adiciona as respetivas taxas
-        /// Se o cliente tiver dinheiro paga, se não tiver aparece a respetiva mensagem
+        /// Recebe a Farmácia e a lista de Produtos encomendados
+        /// Soma o total a pagar dos Produtos encomendados e adiciona as respetivas taxas
+        /// Se o Cliente tiver dinheiro paga, se não tiver aparece a respetiva mensagem
         /// </summary>
-        /// <param name="farmacia">Farmácia que vai vender os produtos</param>
-        /// <param name="encomenda">Lista de Produtos que vão ser comprados pelo cliente</param>
+        /// <param name="farmacia">Farmácia que vai vender os Produtos</param>
+        /// <param name="encomenda">Lista de Produtos que vão ser comprados pelo Cliente</param>
         /// <param name="isReceita">Bool que representa se os Produtos vão ser comprados por Receita</param>
         public void pagar(Farmacia farmacia, List<Produto> encomenda, bool isReceita = false)
         {
@@ -95,79 +87,89 @@ namespace LP_TP1F2_Farmacia
             int contAnimal = 0;
             foreach (Produto produto in encomenda)
             {
-                if((produto.SubCategoria== "AntiInflamatorio") || (produto.SubCategoria== "AntiSeptico"))
+                int quantidadeProduto = 0;
+                foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                {
+                    quantidadeProduto += validadeQuantidade.Quantidade;
+                }
+                if ((produto.SubCategoria== "AntiInflamatorio") || (produto.SubCategoria== "AntiSeptico"))
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.01f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Injecao")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += 1;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Higiene")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.13f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Hipoalergenico")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.06f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Animal")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += 1;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
-                    contAnimal += produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
+                    contAnimal += quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Beleza")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.23f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else
                 {
                     float precoTemp = produto.Preco;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
             }
             if (dinheiro >= totalPagar)
             {
                 foreach (Produto produto in encomenda)
                 {
-                    farmacia.retiraDoStock(produto.Id, produto.Quantidade);
+                    int quantidadeProduto = 0;
+                    foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                    {
+                        quantidadeProduto += validadeQuantidade.Quantidade;
+                    }
+                    farmacia.retiraDoStock(produto.Id, quantidadeProduto);
                 }
                 dinheiro -= totalPagar;
                 farmacia.CausaAnimal += contAnimal;
-                farmacia.Dinheiro += (totalPagar - causaAnimal);
+                farmacia.Dinheiro += (totalPagar - contAnimal);
                 farmacia.ContadorVentas++;
                 Venda venda = new Venda(farmacia.ContadorVentas, id, encomenda, totalPagar, false);
                 farmacia.Vendas.Add(venda);
@@ -191,12 +193,12 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe a farmácia e a lista de produtos encomendados
-        /// Soma o total a pagar dos produtos encomendados
-        /// Se a conta do cliente não exceder os 50€ a venda é criada e adicionado o valor é conta, senão o cliente paga na hora ou cancela
+        /// Recebe a Farmácia e a lista de Produtos encomendados
+        /// Soma o total a pagar dos Produtos encomendados
+        /// Se a conta do Cliente não exceder os 50€ a venda é criada e adicionado o valor é conta, senão o Cliente paga na hora ou cancela
         /// </summary>
-        /// <param name="farmacia">Farmácia que vai vender os produtos</param>
-        /// <param name="encomenda">Lista de Produtos que vão ser comprados pelo cliente</param>
+        /// <param name="farmacia">Farmácia que vai vender os Produtos</param>
+        /// <param name="encomenda">Lista de Produtos que vão ser comprados pelo Cliente</param>
         /// <param name="isReceita">Bool que representa se os Produtos vão ser comprados por Receita</param>
         public void adicionarConta(Farmacia farmacia, List<Produto> encomenda, bool isReceita = false)
         {
@@ -204,77 +206,87 @@ namespace LP_TP1F2_Farmacia
             int contAnimal = 0;
             foreach (Produto produto in encomenda)
             {
+                int quantidadeProduto = 0;
+                foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                {
+                    quantidadeProduto += validadeQuantidade.Quantidade;
+                }
                 if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.01f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Injecao")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += 1;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Higiene")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.13f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Hipoalergenico")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.06f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Animal")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += 1;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
-                    contAnimal += produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
+                    contAnimal += quantidadeProduto;
                 }
                 else if (produto.SubCategoria == "Beleza")
                 {
                     float precoTemp = produto.Preco;
                     precoTemp += produto.Preco * 0.23f;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
                 else
                 {
                     float precoTemp = produto.Preco;
-                    if (isReceita && (produto.Comparticipacao)) { precoTemp -= produto.Preco * 0.05f; }
+                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
                     if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
                     produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * produto.Quantidade;
+                    totalPagar += produto.Preco * quantidadeProduto;
                 }
             }
             if ((conta + totalPagar) < 50)
             {
                 foreach (Produto produto in encomenda)
                 {
-                    farmacia.retiraDoStock(produto.Id, produto.Quantidade);
+                    int quantidadeProduto = 0;
+                    foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                    {
+                        quantidadeProduto += validadeQuantidade.Quantidade;
+                    }
+                    farmacia.retiraDoStock(produto.Id, quantidadeProduto);
                 }
-                conta += totalPagar - contAnimal;
+                conta += (totalPagar - contAnimal);
                 causaAnimal += contAnimal;
                 farmacia.ContadorVentas++;
                 Venda venda = new Venda(farmacia.ContadorVentas, id, encomenda, totalPagar, false);
@@ -299,7 +311,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Paga o valor que o cliente tem em conta (caso tenha dinheiro para tal)
+        /// Paga o valor que o Cliente tem em conta (caso tenha dinheiro para tal)
         /// </summary>
         /// <param name="farmacia">Farmácia à qual vai ser paga a conta</param>
         public void pagarConta(Farmacia farmacia)
@@ -318,7 +330,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Verifica se uma receita existe
+        /// Verifica se uma Receita existe
         /// </summary>
         /// <param name="idReceita">Int com o Id da Receita que vai ser testada</param>
         /// <returns>Bool onde 1 - Existe e 0 - Não existe</returns>
@@ -337,7 +349,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe o código da receita e devolve o objeto Receita desse código
+        /// Recebe o código da Receita e devolve o objeto Receita desse código
         /// </summary>
         /// <param name="idReceita">Int com o Id da Receita</param>
         /// <returns>Objeto Receita</returns>
@@ -356,13 +368,13 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe a Farmácia e a lista de medicamentos a ser devolvidos
-        /// Soma o total a devolver dos medicamentos a ser devolvidos
-        /// Repõem os medicamentos devolvido no stock da farmácia
+        /// Recebe a Farmácia e a lista de Produtos a ser devolvidos
+        /// Soma o total a devolver dos Produtos a ser devolvidos
+        /// Repõem os Produtos devolvidos no stock da Farmácia
         /// </summary>
         /// <param name="farmacia">Farmácia que vai receber a devolução</param>
         /// <param name="devolucao">Lista de Produtos que vão ser devolvidos</param>
-        /// <param name="idVenda">Int com o Id da Venda que vao ter produtos devolvidos</param>
+        /// <param name="idVenda">Int com o Id da Venda que vao ter Produtos devolvidos</param>
         public void devolver(Farmacia farmacia, List<Produto> devolucao, int idVenda)
         {
             Venda venda = farmacia.obterVenda(idVenda);
@@ -372,14 +384,28 @@ namespace LP_TP1F2_Farmacia
             {
                 foreach (Produto produtoVenda in venda.Produtos)
                 {
-                    totalReceber += (produtoVenda.Preco * produtoDevolucao.Quantidade);
-                    produtoVenda.Quantidade -= produtoDevolucao.Quantidade; 
+                    totalReceber += (produtoVenda.Preco * produtoDevolucao.ValidadesQuantidades.First().Quantidade);
+                    for(int i = (produtoVenda.ValidadesQuantidades.Count()-1); i >= 0; i--)
+                    {
+                        produtoVenda.ValidadesQuantidades[i].Quantidade -= produtoDevolucao.ValidadesQuantidades.First().Quantidade;
+                        if (produtoVenda.ValidadesQuantidades[i].Quantidade < 0)
+                        {
+                            int auxQuantidade = produtoDevolucao.ValidadesQuantidades.First().Quantidade;
+                            produtoDevolucao.ValidadesQuantidades.First().Quantidade = (produtoVenda.ValidadesQuantidades[i].Quantidade * (-1));
+                            produtoVenda.ValidadesQuantidades[i].Quantidade = 0;
+                            auxQuantidade -= produtoDevolucao.ValidadesQuantidades.First().Quantidade;
+                            farmacia.reporStock(farmacia.obterProduto(produtoDevolucao.Id), auxQuantidade, produtoVenda.ValidadesQuantidades[i].Validade);
+                        }
+                        else
+                        {
+                            farmacia.reporStock(farmacia.obterProduto(produtoDevolucao.Id), produtoDevolucao.ValidadesQuantidades.First().Quantidade, produtoVenda.ValidadesQuantidades[i].Validade);
+                        }
+                    }
                     if (produtoDevolucao.SubCategoria == "Animal")
                     {
-                        contAnimal += produtoDevolucao.Quantidade;
+                        contAnimal += produtoDevolucao.ValidadesQuantidades.First().Quantidade;
                     }
                 }
-                farmacia.reporStock(farmacia.obterProduto(produtoDevolucao.Id), produtoDevolucao.Quantidade);
             }
             dinheiro += totalReceber;
             venda.TotalPago -= totalReceber;
@@ -407,36 +433,48 @@ namespace LP_TP1F2_Farmacia
         }
     }
 
+    class ValidadeQuantidade
+    {
+        private int quantidade;
+        private DateTime validade;
+
+        public int Quantidade { get => quantidade; set => quantidade = value; }
+        public DateTime Validade { get => validade; set => validade = value; }
+
+        public ValidadeQuantidade(int quantidade, DateTime validade)
+        {
+            this.quantidade = quantidade;
+            this.validade = validade;
+        }
+    }
+
     class Produto
     {
         private int id;
         private string nome;
         private float preco;
-        private int quantidade;
         private bool comparticipacao;
-        private DateTime validade;
+        private List<ValidadeQuantidade> validadesQuantidades;
         private string descrição;
         private string categoria; //M, HA, B
         private string subCategoria; //Sub-categoria
 
         public string Nome { get => nome; set => nome = value; }
         public float Preco { get => preco; set => preco = value; }
-        public int Quantidade { get => quantidade; set => quantidade = value; }
         public bool Comparticipacao { get => comparticipacao; set => comparticipacao = value; }
         public int Id { get => id; set => id = value; }
-        public DateTime Validade { get => validade; set => validade = value; }
         public string Descrição { get => descrição; set => descrição = value; }
         public string Categoria { get => categoria; set => categoria = value; }
         public string SubCategoria { get => subCategoria; set => subCategoria = value; }
+        public List<ValidadeQuantidade> ValidadesQuantidades { get => validadesQuantidades; set => validadesQuantidades = value; }
 
-        public Produto(int id, string nome, float preco, int quantidade, bool comparticipacao, DateTime validade, string descrição, string categoria, string subCategoria)
+        public Produto(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria)
         {
             this.id = id;
             this.nome = nome;
             this.preco = preco;
-            this.quantidade = quantidade;
             this.comparticipacao = comparticipacao;
-            this.validade = validade;
+            this.validadesQuantidades = validadesQuantidades;
             this.descrição = descrição;
             this.categoria = categoria;
             this.subCategoria = subCategoria;
@@ -476,7 +514,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe o ID do cliente e devolve um Objeto Cliente desse Id ou devolve um Objeto Cliente = null caso não exista
+        /// Recebe o ID do Cliente e devolve um Objeto Cliente desse Id ou devolve um Objeto Cliente = null caso não exista
         /// </summary>
         /// <param name="idCliente">Int com o Id do Cliente que vai ser devolvido</param>
         /// <returns>Objeto Cliente</returns>
@@ -495,7 +533,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe o ID do funcionário e devolve um Objeto Funcionario desse Id ou devolve um Objeto Funcionario = null caso não exista
+        /// Recebe o ID do Funcionário e devolve um Objeto Funcionario desse Id ou devolve um Objeto Funcionario = null caso não exista
         /// </summary>
         /// <param name="idFuncionario">Int com o Id do Funcionário que vai ser devolvido</param>
         /// <returns>Objeto Funcionário</returns>
@@ -514,7 +552,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Lista todos os produtos em stock
+        /// Lista todos os Produtos em stock
         /// </summary>
         public void mostrarProdutos()
         {
@@ -522,15 +560,23 @@ namespace LP_TP1F2_Farmacia
             Console.WriteLine("Lista de produtos:\n");
             foreach (Produto produto in produtos)
             {
-                if (produto.Quantidade > 0)
+                int stock = 0;
+                foreach(ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
                 {
-                    Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros" + " - " + produto.Validade.ToString("d") + " - " + produto.Descrição);
+                    if(validadeQuantidade.Validade >= data)
+                    {
+                        stock += validadeQuantidade.Quantidade;
+                    }
+                }
+                if (stock > 0)
+                {
+                    Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros" + " - " + produto.Descrição);
                 }
             }
         }
 
         /// <summary>
-        /// Verifica se um determinado produto existe
+        /// Verifica se um determinado Produto existe
         /// </summary>
         /// <param name="idProduto">Int dom o Id do Produto que vai ser testado</param>
         /// <returns>Bool onde 1 - Existe e 0 - Não existe</returns>
@@ -549,7 +595,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Verifica se um determinado produto existe em stock numa determinada quantidade
+        /// Verifica se um determinado Produto existe em stock numa determinada quantidade
         /// </summary>
         /// <param name="idMedicamento">Int com o Id do Medicamento que vai ser testado</param>
         /// <param name="quantidade">Int com a Quantidade que vai ser testada</param>
@@ -561,10 +607,21 @@ namespace LP_TP1F2_Farmacia
             {
                 foreach (Produto produto in produtos)
                 {
-                    if ((quantidade <= produto.Quantidade) && (produto.Id == idMedicamento))
+                    if (produto.Id == idMedicamento)
                     {
-                        existe = true;
-                        break;
+                        int stock = 0;
+                        foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                        {
+                            if (validadeQuantidade.Validade >= data)
+                            {
+                                stock += validadeQuantidade.Quantidade;
+                            }
+                        }
+                        if (stock >= quantidade)
+                        {
+                            existe = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -572,7 +629,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe o ID do produto e devolve o objeto Produto desse código
+        /// Recebe o ID do Produto e devolve o objeto Produto desse Id
         /// </summary>
         /// <param name="idProduto">Int com o Id do Produto que vai ser devolvido</param>
         /// <returns>Objeto Produto</returns>
@@ -591,7 +648,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Retira do stock uma certa quantidade de produtos
+        /// Retira do stock uma certa quantidade de Produtos
         /// </summary>
         /// <param name="idProduto">Int com o Id do Produto que vai ser retirado do stock</param>
         /// <param name="quantidade">Int com a Quantidade que vai ser retirada</param>
@@ -603,7 +660,23 @@ namespace LP_TP1F2_Farmacia
                 {
                     if (idProduto == produto.Id)
                     {
-                        produto.Quantidade -= quantidade;
+                        foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                        {
+                            if (validadeQuantidade.Validade >= data)
+                            {
+                                if (validadeQuantidade.Quantidade >= quantidade)
+                                {
+                                    validadeQuantidade.Quantidade -= quantidade;
+                                    break;
+                                }
+                                else
+                                {
+                                    validadeQuantidade.Quantidade -= quantidade;
+                                    quantidade = (validadeQuantidade.Quantidade * (-1));
+                                    validadeQuantidade.Quantidade = 0;
+                                }
+                            }
+                        }
                         break;
                     }
                 }
@@ -611,7 +684,39 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Verifica se uma determinada venda existe
+        /// Precorre as ValidadesQuantidades de um Produto e devolve uma Lista de ValidadeQuantidade para a opção "Comprar Produtos"
+        /// Função criada apenas para tornar a devolução de Produtos mais fácil. Sem esta função, não era possivel saber que data de validade tem o produto que vai ser devolvido
+        /// </summary>
+        /// <param name="idProduto">Id do Produto que vai ser adicionado ao carrinho</param>
+        /// <param name="quantidadeProduto">quantidade que vai ser adicionada ao carrinho</param>
+        /// <returns>Lista de ValidadeQuantidade</returns>
+        public List<ValidadeQuantidade> ValidadeQuantidadeParaCompra(int idProduto, int quantidadeProduto)
+        {
+            Produto produto = obterProduto(idProduto);
+            List<ValidadeQuantidade> validadesQuantidadesCompra = new List<ValidadeQuantidade>();
+            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+            {
+                if (validadeQuantidade.Validade >= data)
+                {
+                    if (validadeQuantidade.Quantidade >= quantidadeProduto)
+                    {
+                        ValidadeQuantidade validadeQuantidadeAdicionarCompra = new ValidadeQuantidade(quantidadeProduto, validadeQuantidade.Validade);
+                        validadesQuantidadesCompra.Add(validadeQuantidadeAdicionarCompra);
+                        break;
+                    }
+                    else
+                    {
+                        ValidadeQuantidade validadeQuantidadeAdicionarCompra = new ValidadeQuantidade(validadeQuantidade.Quantidade, validadeQuantidade.Validade);
+                        validadesQuantidadesCompra.Add(validadeQuantidadeAdicionarCompra);
+                        quantidadeProduto -= validadeQuantidade.Quantidade;
+                    }
+                }
+            }
+            return validadesQuantidadesCompra;
+        }
+
+        /// <summary>
+        /// Verifica se uma determinada Venda existe
         /// </summary>
         /// <param name="idVenda">Int com o Id da Venda que vai ser testada</param>
         /// <returns>Bool onde 1 - Existe e 0 - Não existe</returns>
@@ -630,9 +735,9 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Lista os produtos guardados numa venda
+        /// Lista os Produtos guardados numa Venda
         /// </summary>
-        /// <param name="idVenda">Int com o Id da Venda cujos produtos vão ser listados</param>
+        /// <param name="idVenda">Int com o Id da Venda cujos Produtos vão ser listados</param>
         public void mostrarProdutosDaVenda(int idVenda)
         {
             Venda venda = obterVenda(idVenda);
@@ -642,13 +747,18 @@ namespace LP_TP1F2_Farmacia
                 Console.WriteLine("Lista de produtos:\n");
                 foreach (Produto produto in venda.Produtos)
                 {
-                    Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros - " + produto.Quantidade);
+                    int quantidade = 0;
+                    foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                    {
+                        quantidade += validadeQuantidade.Quantidade;
+                    }
+                    Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros - " + quantidade + " unidades");
                 }
             }
         }
 
         /// <summary>
-        /// Devolve um Objeto Venda a partir de um Id de venda recebido
+        /// Devolve um Objeto Venda a partir de um Id de Venda recebido
         /// </summary>
         /// <param name="idVenda">Int com o Id da Venda que vai ser devolvida</param>
         /// <returns>Objeto Venda</returns>
@@ -667,19 +777,25 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe o Id da venda, do medicamento e a quantidade para ver se é possivel devolver essa quantidade desse medicamento nessa venda
+        /// Recebe o Id da venda, do produto e a quantidade para ver se é possivel devolver essa quantidade desse produto nessa venda
         /// </summary>
-        /// <param name="idVenda">Int com o Id da Venda que vai ter produtos devolvidos</param>
+        /// <param name="idVenda">Int com o Id da Venda que vai ter Produtos devolvidos</param>
         /// <param name="idProduto">Int com o Id do Produto que vai ser devolvido</param>
         /// <param name="quantidade">Int com a quantidade a ser testada</param>
-        /// <returns>Bool onde 1 - Existe a quantidade na venda e 0 - Não existe a quantidade na venda</returns>
+        /// <returns>Bool onde 1 - Existe a quantidade na Venda e 0 - Não existe a quantidade na Venda</returns>
         public bool existeQuantidadeNaVenda(int idVenda, int idProduto, int quantidade)
         {
             bool existe = false;
             Venda venda = obterVenda(idVenda);
             foreach (Produto produto in venda.Produtos)
             {
-                if ((quantidade <= produto.Quantidade) && (produto.Id == idProduto))
+                int quantidadeVenda = 0;
+                foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                {
+                    quantidadeVenda += validadeQuantidade.Quantidade;
+                }
+
+                if ((quantidade <= quantidadeVenda) && (produto.Id == idProduto))
                 {
                     existe = true;
                     break;
@@ -689,31 +805,51 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Recebe um Objeto Produto e adiciona a "quantidadeAdicionar" à atual quantidade
+        /// Recebe um Objeto Produto, cria uma nova "ValidadeQuantidade" e adiciona-a a esse preoduto
         /// </summary>
         /// <param name="produto">Objeto Produto que vai ter o stock reposto</param>
         /// <param name="quantidadeAdicionar">Int da quantidade que vai ser reposta no stock</param>
-        public void reporStock(Produto produto, int quantidadeAdicionar)
+        public void reporStock(Produto produto, int quantidadeAdicionar, DateTime validadeAdicionar)
         {
-            produto.Quantidade += quantidadeAdicionar;
+            bool existe = false;
+            foreach(ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+            {
+                if (validadeQuantidade.Validade == validadeAdicionar)
+                {
+                    validadeQuantidade.Quantidade += quantidadeAdicionar;
+                    existe = true;
+                    break;
+                }
+            }
+            if (existe == false)
+            {
+                ValidadeQuantidade novaValidadeQuantidade = new ValidadeQuantidade(quantidadeAdicionar, validadeAdicionar);
+                produto.ValidadesQuantidades.Add(novaValidadeQuantidade);
+            }
         }
 
         /// <summary>
-        /// Percorre os produtos da farmácia e calcula o valor total do stock
+        /// Percorre os Produtos da Farmácia e calcula o valor total em stock
         /// </summary>
-        /// <returns>float com o valor total do stock da farmácia</returns>
+        /// <returns>float com o valor total do stock da Farmácia</returns>
         public float totalProdutos()
         {
             float totalProdutos = 0;
             foreach (Produto produto in produtos)
             {
-                totalProdutos += (produto.Preco * produto.Quantidade);
+                foreach(ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                {
+                    if (validadeQuantidade.Validade >= data)
+                    {
+                        totalProdutos += (produto.Preco * validadeQuantidade.Quantidade);
+                    }
+                }
             }
             return totalProdutos;
         }
 
         /// <summary>
-        /// Percorre os produtos da farmácia e calcula o valor total do stock de cada tipo
+        /// Percorre os Produtos da Farmácia e calcula o valor total em stock de cada tipo
         /// </summary>
         public void totalProdutosPorTipo()
         {
@@ -724,37 +860,67 @@ namespace LP_TP1F2_Farmacia
                 {
                     case "Opiacio":
                         {
-                            totalOpiacio += produto.Preco * produto.Quantidade;
+                            foreach(ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                if (validadeQuantidade.Validade >= data)
+                                {
+                                    totalOpiacio += produto.Preco * validadeQuantidade.Quantidade;
+                                }
+                            }
                             break;
                         }
                     case "AntiInflamatorio":
                         {
-                            totalAntiInflamatorio += produto.Preco * produto.Quantidade;
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                if (validadeQuantidade.Validade >= data)
+                                {
+                                    totalAntiInflamatorio += produto.Preco * validadeQuantidade.Quantidade;
+                                }
+                            }
                             break;
                         }
                     case "Injecao":
                         {
-                            totalInjecao += produto.Preco * produto.Quantidade;
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                if (validadeQuantidade.Validade >= data)
+                                {
+                                    totalInjecao += produto.Preco * validadeQuantidade.Quantidade;
+                                }
+                            }
                             break;
                         }
                     case "Higiene":
                         {
-                            totalHigiene += produto.Preco * produto.Quantidade;
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                totalHigiene += produto.Preco * validadeQuantidade.Quantidade;
+                            }
                             break;
                         }
                     case "Hipoalergenico":
                         {
-                            totalHipoalergenico += produto.Preco * produto.Quantidade;
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                totalHipoalergenico += produto.Preco * validadeQuantidade.Quantidade;
+                            }
                             break;
                         }
                     case "Animal":
                         {
-                            totalAnimal += produto.Preco * produto.Quantidade;
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                totalAnimal += produto.Preco * validadeQuantidade.Quantidade;
+                            }
                             break;
                         }
                     case "Beleza":
                         {
-                            totalBeleza += produto.Preco * produto.Quantidade;
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                totalBeleza += produto.Preco * validadeQuantidade.Quantidade;
+                            }
                             break;
                         }
                 }
@@ -769,7 +935,7 @@ namespace LP_TP1F2_Farmacia
         }
 
         /// <summary>
-        /// Lista todos os produtos (mesmo que não existam em stock)
+        /// Lista todos os Produtos (mesmo que não existam em stock)
         /// </summary>
         public void mostrarTodosProdutos()
         {
@@ -777,7 +943,19 @@ namespace LP_TP1F2_Farmacia
             Console.WriteLine("Lista de produtos:\n");
             foreach (Produto produto in produtos)
             {
-                Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros" + " - " + produto.Validade.ToString("d") + " - " + produto.Quantidade + " unidades");
+                int stockDentroValidade = 0, stockForaValidade = 0;
+                foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                {
+                    if (validadeQuantidade.Validade >= data)
+                    {
+                        stockDentroValidade += validadeQuantidade.Quantidade;
+                    }
+                    else
+                    {
+                        stockForaValidade += validadeQuantidade.Quantidade;
+                    }
+                }
+                Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + produto.Preco + " euros" + " - "  + stockDentroValidade + " unidades dentro da validade e " + stockForaValidade + " fora da validade");
             }
         }
     }
@@ -818,21 +996,67 @@ namespace LP_TP1F2_Farmacia
             funcionarios.Add(func2);
             funcionarios.Add(func3);
 
-            DateTime data = new DateTime(2018, 12, 25);
-            Produto prod1 = new Produto(1, "Benuron", 5.0f, 100, true, data, "Opiácio", "M", "Opiacio");
-            Produto prod2 = new Produto(2, "Brufen", 6.0f, 100, true, data, "Opiácio", "M", "Opiacio");
-            Produto prod3 = new Produto(3, "Antiflan", 7.0f, 100, true, data, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod4 = new Produto(4, "Ceprofen", 8.0f, 100, true, data, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod5 = new Produto(5, "Vacina", 9.0f, 100, true, data, "Injeções", "M", "Injecao");
-            Produto prod6 = new Produto(6, "Noregyna", 10.0f, 100, true, data, "Injeções", "M", "Injecao");
-            Produto prod7 = new Produto(7, "Colgate", 11.0f, 100, false, data, "Pasta de Dentes", "HA", "Higiene");
-            Produto prod8 = new Produto(8, "Linic", 12.0f, 100, false, data, "Champô", "HA", "Higiene");
-            Produto prod9 = new Produto(9, "Papa s/ Glúten", 13.0f, 100, false, data, "Papa sem Glúten", "HA", "Hipoalergenico");
-            Produto prod10 = new Produto(10, "Papa s/ Amido", 14.0f, 100, false, data, "Papa sem Amido", "HA", "Hipoalergenico");
-            Produto prod11 = new Produto(11, "Scalibor", 15.0f, 100, false, data, "Desparazitante de animal", "HA", "Animal");
-            Produto prod12 = new Produto(12, "Amflee", 16.0f, 100, false, data, "Desparazitante de animal", "HA", "Animal");
-            Produto prod13 = new Produto(13, "Dove", 17.0f, 100, false, data, "Creme hedratante", "B", "Beleza");
-            Produto prod14 = new Produto(14, "Nivea", 18.0f, 100, false, data, "Creme hedratante", "B", "Beleza");
+            DateTime validade = new DateTime(2018, 12, 25);
+            //DateTime validade2 = new DateTime(2019, 12, 25);
+            ValidadeQuantidade validadeQuantidade1 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade2 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade3 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade4 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade5 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade6 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade7 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade8 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade9 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade10 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade11 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade12 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade13 = new ValidadeQuantidade(100, validade);
+            ValidadeQuantidade validadeQuantidade14 = new ValidadeQuantidade(100, validade);
+            //ValidadeQuantidade validadeQuantidade15 = new ValidadeQuantidade(2, validade2);
+            List<ValidadeQuantidade> validadesQuantidades1 = new List<ValidadeQuantidade>();
+            validadesQuantidades1.Add(validadeQuantidade1);
+            //validadesQuantidades1.Add(validadeQuantidade15);
+            List<ValidadeQuantidade> validadesQuantidades2 = new List<ValidadeQuantidade>();
+            validadesQuantidades2.Add(validadeQuantidade2);
+            List<ValidadeQuantidade> validadesQuantidades3 = new List<ValidadeQuantidade>();
+            validadesQuantidades3.Add(validadeQuantidade3);
+            List<ValidadeQuantidade> validadesQuantidades4 = new List<ValidadeQuantidade>();
+            validadesQuantidades4.Add(validadeQuantidade4);
+            List<ValidadeQuantidade> validadesQuantidades5 = new List<ValidadeQuantidade>();
+            validadesQuantidades5.Add(validadeQuantidade5);
+            List<ValidadeQuantidade> validadesQuantidades6 = new List<ValidadeQuantidade>();
+            validadesQuantidades6.Add(validadeQuantidade6);
+            List<ValidadeQuantidade> validadesQuantidades7 = new List<ValidadeQuantidade>();
+            validadesQuantidades7.Add(validadeQuantidade7);
+            List<ValidadeQuantidade> validadesQuantidades8 = new List<ValidadeQuantidade>();
+            validadesQuantidades8.Add(validadeQuantidade8);
+            List<ValidadeQuantidade> validadesQuantidades9 = new List<ValidadeQuantidade>();
+            validadesQuantidades9.Add(validadeQuantidade9);
+            List<ValidadeQuantidade> validadesQuantidades10 = new List<ValidadeQuantidade>();
+            validadesQuantidades10.Add(validadeQuantidade10);
+            List<ValidadeQuantidade> validadesQuantidades11 = new List<ValidadeQuantidade>();
+            validadesQuantidades11.Add(validadeQuantidade11);
+            List<ValidadeQuantidade> validadesQuantidades12 = new List<ValidadeQuantidade>();
+            validadesQuantidades12.Add(validadeQuantidade12);
+            List<ValidadeQuantidade> validadesQuantidades13 = new List<ValidadeQuantidade>();
+            validadesQuantidades13.Add(validadeQuantidade13);
+            List<ValidadeQuantidade> validadesQuantidades14 = new List<ValidadeQuantidade>();
+            validadesQuantidades14.Add(validadeQuantidade14);
+
+            Produto prod1 = new Produto(1, "Benuron", 5.0f, true, validadesQuantidades1, "Opiácio", "M", "Opiacio");
+            Produto prod2 = new Produto(2, "Brufen", 6.0f, true, validadesQuantidades2, "Opiácio", "M", "Opiacio");
+            Produto prod3 = new Produto(3, "Antiflan", 7.0f, true, validadesQuantidades3, "Anti-Inflamatório", "M", "AntiInflamatorio");
+            Produto prod4 = new Produto(4, "Ceprofen", 8.0f, true, validadesQuantidades4, "Anti-Inflamatório", "M", "AntiInflamatorio");
+            Produto prod5 = new Produto(5, "Vacina", 9.0f, true, validadesQuantidades5, "Injeções", "M", "Injecao");
+            Produto prod6 = new Produto(6, "Noregyna", 10.0f, true, validadesQuantidades6, "Injeções", "M", "Injecao");
+            Produto prod7 = new Produto(7, "Colgate", 11.0f, false, validadesQuantidades7, "Pasta de Dentes", "HA", "Higiene");
+            Produto prod8 = new Produto(8, "Linic", 12.0f, false, validadesQuantidades8, "Champô", "HA", "Higiene");
+            Produto prod9 = new Produto(9, "Papa s/ Glúten", 13.0f, false, validadesQuantidades9, "Papa sem Glúten", "HA", "Hipoalergenico");
+            Produto prod10 = new Produto(10, "Papa s/ Amido", 14.0f, false, validadesQuantidades10, "Papa sem Amido", "HA", "Hipoalergenico");
+            Produto prod11 = new Produto(11, "Scalibor", 15.0f, false, validadesQuantidades11, "Desparazitante de animal", "HA", "Animal");
+            Produto prod12 = new Produto(12, "Amflee", 16.0f, false, validadesQuantidades12, "Desparazitante de animal", "HA", "Animal");
+            Produto prod13 = new Produto(13, "Dove", 17.0f, false, validadesQuantidades13, "Creme hedratante", "B", "Beleza");
+            Produto prod14 = new Produto(14, "Nivea", 18.0f, false, validadesQuantidades14, "Creme hedratante", "B", "Beleza");
 
             List<Produto> produtos = new List<Produto>();
             produtos.Add(prod1);
@@ -850,13 +1074,17 @@ namespace LP_TP1F2_Farmacia
             produtos.Add(prod13);
             produtos.Add(prod14);
 
-            Produto prod1Receita = new Produto(1, "Benuron", 5.0f, 2, true, data, "Opiácio", "M", "Opiacio");
-            Produto prod2Receita = new Produto(3, "Antiflan", 7.0f, 2, true, data, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod3Receita = new Produto(5, "Vacina", 9.0f, 2, true, data, "Injeções", "M", "Injecao");
-            Produto prod4Receita = new Produto(7, "Colgate", 11.0f, 2, false, data, "Pasta de Dentes", "HA", "Higiene");
-            Produto prod5Receita = new Produto(9, "Papa s/ Glúten", 13.0f, 2, false, data, "Papa sem Glúten", "HA", "Hipoalergenico");
-            Produto prod6Receita = new Produto(11, "Scalibor", 15.0f, 2, false, data, "Desparazitante de animal", "HA", "Animal");
-            Produto prod7Receita = new Produto(13, "Dove", 17.0f, 2, false, data, "Creme hedratante", "B", "Beleza");
+            ValidadeQuantidade validadeQuantidadeReceita = new ValidadeQuantidade(2, validade);
+            List<ValidadeQuantidade> validadesQuantidadesReceita = new List<ValidadeQuantidade>();
+            validadesQuantidadesReceita.Add(validadeQuantidadeReceita);
+
+            Produto prod1Receita = new Produto(1, "Benuron", 5.0f, true, validadesQuantidadesReceita, "Opiácio", "M", "Opiacio");
+            Produto prod2Receita = new Produto(3, "Antiflan", 7.0f, true, validadesQuantidadesReceita, "Anti-Inflamatório", "M", "AntiInflamatorio");
+            Produto prod3Receita = new Produto(5, "Vacina", 9.0f, true, validadesQuantidadesReceita, "Injeções", "M", "Injecao");
+            Produto prod4Receita = new Produto(7, "Colgate", 11.0f, false, validadesQuantidadesReceita, "Pasta de Dentes", "HA", "Higiene");
+            Produto prod5Receita = new Produto(9, "Papa s/ Glúten", 13.0f, false, validadesQuantidadesReceita, "Papa sem Glúten", "HA", "Hipoalergenico");
+            Produto prod6Receita = new Produto(11, "Scalibor", 15.0f, false, validadesQuantidadesReceita, "Desparazitante de animal", "HA", "Animal");
+            Produto prod7Receita = new Produto(13, "Dove", 17.0f, false, validadesQuantidadesReceita, "Creme hedratante", "B", "Beleza");
             List<Produto> produtosReceita = new List<Produto>();
             produtosReceita.Add(prod1Receita);
             produtosReceita.Add(prod2Receita);
@@ -986,7 +1214,7 @@ namespace LP_TP1F2_Farmacia
                                         if (farmacia.existeQuantidade(idProdutoInt, quantidadeProdutoInt))
                                         {
                                             Produto prod = farmacia.obterProduto(idProdutoInt);
-                                            Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, quantidadeProdutoInt, prod.Comparticipacao, prod.Validade, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                            Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
                                             encomenda.Add(prodTemp);
                                             Console.WriteLine("\nProduto adicionado com sucesso.");
                                             while (Console.KeyAvailable)
@@ -1117,17 +1345,21 @@ namespace LP_TP1F2_Farmacia
                                         {
                                             farmacia.mostrarProdutosDaVenda(codVendaInt);
                                             Console.Write("\nIntroduza o código do produto que quer devolver (0 para finalizar a devolução): ");
-                                            string codigoProduto = Console.ReadLine();
-                                            int codigoProdutoInt = Int32.Parse(codigoProduto);
-                                            if (codigoProdutoInt != 0)
+                                            string idProduto = Console.ReadLine();
+                                            int idProdutoInt = Int32.Parse(idProduto);
+                                            if (idProdutoInt != 0)
                                             {
                                                 Console.Write("Introduza a quantidade do produtos que quer devolver: ");
                                                 string quantidadeProduto = Console.ReadLine();
                                                 int quantidadeProdutoInt = Int32.Parse(quantidadeProduto);
-                                                if (farmacia.existeQuantidadeNaVenda(codVendaInt, codigoProdutoInt, quantidadeProdutoInt))
+                                                if (farmacia.existeQuantidadeNaVenda(codVendaInt, idProdutoInt, quantidadeProdutoInt))
                                                 {
-                                                    Produto prod = farmacia.obterProduto(codigoProdutoInt);
-                                                    Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, quantidadeProdutoInt, prod.Comparticipacao, prod.Validade, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                    Produto prod = farmacia.obterProduto(idProdutoInt);
+                                                    DateTime dataVQ = new DateTime(1, 1, 1);
+                                                    ValidadeQuantidade vq = new ValidadeQuantidade(quantidadeProdutoInt, dataVQ);
+                                                    List<ValidadeQuantidade> lvq = new List<ValidadeQuantidade>();
+                                                    lvq.Add(vq);
+                                                    Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
                                                     devolucao.Add(prodTemp);
                                                     Console.WriteLine("\nProduto adicionado com sucesso para devolução.");
                                                     while (Console.KeyAvailable)
@@ -1212,7 +1444,10 @@ namespace LP_TP1F2_Farmacia
                                         Console.Write("Introduza a quantidade a adicionar: ");
                                         string quantidade = Console.ReadLine();
                                         int quantidadeInt = Int32.Parse(quantidade);
-                                        farmacia.reporStock(farmacia.obterProduto(codigocodigoProdutoInt), quantidadeInt);
+                                        Console.Write("Introduza a data de validade desse(s) produto(s) (DD/MM/AAAA): ");
+                                        string dataValidade = Console.ReadLine();
+                                        DateTime dataValidadeDateTime = DateTime.Parse(dataValidade);
+                                        farmacia.reporStock(farmacia.obterProduto(codigocodigoProdutoInt), quantidadeInt, dataValidadeDateTime);
                                         Console.WriteLine("\nProduto adicionado com sucesso ao stock.");
                                         while (Console.KeyAvailable)
                                         {
@@ -1226,11 +1461,6 @@ namespace LP_TP1F2_Farmacia
                                     }
                                 }
                             }
-                            while (Console.KeyAvailable)
-                            {
-                                Console.ReadKey(false);
-                            }
-                            Console.ReadKey();
                             break;
                         }
                     case "100":
