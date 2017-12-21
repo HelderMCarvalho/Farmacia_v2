@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 /*
-    Ações da Farmácia:
-    - Respeitar a fila de atendimento;
-    - Verificar validades.
-
     Detalhes:
     Criar as classes, variáveis e structs necessárias para modelar:
     - Medicamentos:
@@ -18,7 +15,6 @@ using System.Threading.Tasks;
     - Receita que é basicamente mas que só acaba quando todos os medicamentos forem levantados;
     - Todos os dados têm de ser carregados a partir de ficheiros. Como tal também devem haver métodos que permitam guardar 
     os dados em ficheiros;
-    - Tem de ser estabelecidas filas para atender os clientes.
 */
 
 namespace LP_TP1F2_Farmacia
@@ -77,11 +73,12 @@ namespace LP_TP1F2_Farmacia
         /// Recebe a Farmácia e a lista de Produtos encomendados
         /// Soma o total a pagar dos Produtos encomendados e adiciona as respetivas taxas
         /// Se o Cliente tiver dinheiro paga, se não tiver aparece a respetiva mensagem
+        /// FUNÇÃO EXECUTADA NA INTERFACE DO FUNCIONÁRIO
         /// </summary>
         /// <param name="farmacia">Farmácia que vai vender os Produtos</param>
         /// <param name="encomenda">Lista de Produtos que vão ser comprados pelo Cliente</param>
         /// <param name="isReceita">Bool que representa se os Produtos vão ser comprados por Receita</param>
-        public void pagar(Farmacia farmacia, List<Produto> encomenda, bool isReceita = false)
+        public void pagar(Farmacia farmacia, List<Produto> encomenda, bool isReceita)
         {
             float totalPagar = 0;
             int contAnimal = 0;
@@ -173,12 +170,12 @@ namespace LP_TP1F2_Farmacia
                 farmacia.ContadorVentas++;
                 Venda venda = new Venda(farmacia.ContadorVentas, id, encomenda, totalPagar, false);
                 farmacia.Vendas.Add(venda);
-                Console.WriteLine("\nCompra efetuada com sucesso.");
-                Console.WriteLine("O seu código de venda é: " + farmacia.ContadorVentas);
+                Console.WriteLine("\nVenda efetuada com sucesso.");
+                Console.WriteLine("O código de venda é: " + farmacia.ContadorVentas);
             }
             else
             {
-                Console.Write("\nNão tem dinheiro suficiente.\nDeseja adicionar á conta ou cancelar a compra? (0 - Adicionar á conta | 1 - Cancelar): ");
+                Console.Write("\nO cliente não tem dinheiro suficiente.\nEle deseja adicionar á conta ou cancelar a compra? (0 - Adicionar á conta | 1 - Cancelar): ");
                 string pagarCancelar = Console.ReadLine();
                 int pagarCancelarInt = Int32.Parse(pagarCancelar);
                 if (pagarCancelarInt == 0)
@@ -196,11 +193,12 @@ namespace LP_TP1F2_Farmacia
         /// Recebe a Farmácia e a lista de Produtos encomendados
         /// Soma o total a pagar dos Produtos encomendados
         /// Se a conta do Cliente não exceder os 50€ a venda é criada e adicionado o valor é conta, senão o Cliente paga na hora ou cancela
+        /// FUNÇÃO EXECUTADA NA INTERFACE DO FUNCIONÁRIO
         /// </summary>
         /// <param name="farmacia">Farmácia que vai vender os Produtos</param>
         /// <param name="encomenda">Lista de Produtos que vão ser comprados pelo Cliente</param>
         /// <param name="isReceita">Bool que representa se os Produtos vão ser comprados por Receita</param>
-        public void adicionarConta(Farmacia farmacia, List<Produto> encomenda, bool isReceita = false)
+        public void adicionarConta(Farmacia farmacia, List<Produto> encomenda, bool isReceita)
         {
             float totalPagar = 0;
             int contAnimal = 0;
@@ -291,12 +289,12 @@ namespace LP_TP1F2_Farmacia
                 farmacia.ContadorVentas++;
                 Venda venda = new Venda(farmacia.ContadorVentas, id, encomenda, totalPagar, false);
                 farmacia.Vendas.Add(venda);
-                Console.WriteLine("\nCompra adicionada com sucesso á conta.");
-                Console.WriteLine("O seu código de venda é: " + farmacia.ContadorVentas);
+                Console.WriteLine("\nVenda adicionada com sucesso á conta do cliente.");
+                Console.WriteLine("O código de venda é: " + farmacia.ContadorVentas);
             }
             else
             {
-                Console.Write("\nNão pode adicionar á conta porque a mesma excede os 50 euros.\nDeseja pagar agora ou cancelar a compra? (0 - Pagar agora | 1 - Cancelar): ");
+                Console.Write("\nA conta do cliente excede os 50 euros.\nEle deseja pagar agora ou cancelar a compra? (0 - Pagar agora | 1 - Cancelar): ");
                 string pagarCancelar = Console.ReadLine();
                 int pagarCancelarInt = Int32.Parse(pagarCancelar);
                 if (pagarCancelarInt == 0)
@@ -984,6 +982,27 @@ namespace LP_TP1F2_Farmacia
         public bool IsReceita { get => isReceita; set => isReceita = value; }
     }
 
+    struct PreVenda
+    {
+        private Cliente cliente;
+        private Farmacia farmacia;
+        private List<Produto> encomenda;
+        private bool isReceita;
+        
+        public Farmacia Farmacia { get => farmacia; set => farmacia = value; }
+        public List<Produto> Encomenda { get => encomenda; set => encomenda = value; }
+        public Cliente Cliente { get => cliente; set => cliente = value; }
+        public bool IsReceita { get => isReceita; set => isReceita = value; }
+
+        public PreVenda(Cliente cliente, Farmacia farmacia, List<Produto> encomenda, bool isReceita)
+        {
+            this.cliente = cliente;
+            this.farmacia = farmacia;
+            this.encomenda = encomenda;
+            this.isReceita = isReceita;
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -1110,6 +1129,8 @@ namespace LP_TP1F2_Farmacia
             DateTime dataFarmacia = new DateTime(2017, 12, 14);
             Farmacia farmacia = new Farmacia(funcionarios, clientes, produtos, 0, vendas, 10000.0f, dataFarmacia, 0.0f);
 
+            Queue<PreVenda> filaAtendimento = new Queue<PreVenda>();
+
             Cliente clienteAtual = null;
             Funcionario funcionarioAtual = null;
             bool acabou = false;
@@ -1184,6 +1205,7 @@ namespace LP_TP1F2_Farmacia
                 Console.WriteLine("4 - Devolver produtos");
                 Console.WriteLine("5 - Mostrar valor total em produtos no stock");
                 Console.WriteLine("6 - Repor stock");
+                Console.WriteLine("7 - Atender próximo cliente");
                 Console.WriteLine("0 - SAIR");
                 Console.Write("\nA sua opção: ");
                 string opcao = Console.ReadLine();
@@ -1236,21 +1258,11 @@ namespace LP_TP1F2_Farmacia
                                     else
                                     {
                                         acabou1 = true;
+                                        Console.WriteLine("\nA sua encomenda foi adicionada à fila de atendimento!");
                                     }
                                 }
-                                Console.Write("Quer pagar agora ou deixar na conta? (0 - Pagar Agora | 1 - Deixar na conta): ");
-                                string tipoPagamento = Console.ReadLine();
-                                int tipoPagamentoInt = Int32.Parse(tipoPagamento);
-                                if (tipoPagamentoInt == 0)
-                                {
-                                    //Adicionar á fila de atendimento
-                                    clienteAtual.pagar(farmacia, encomenda);
-                                }
-                                else
-                                {
-                                    //Adicionar á fila de atendimento
-                                    clienteAtual.adicionarConta(farmacia, encomenda);
-                                }
+                                PreVenda prevenda = new PreVenda(clienteAtual, farmacia, encomenda, false);
+                                filaAtendimento.Enqueue(prevenda);
                             }
                             while (Console.KeyAvailable)
                             {
@@ -1278,19 +1290,9 @@ namespace LP_TP1F2_Farmacia
                                     if (clienteAtual.existeReceita(codigoReceitaInt))
                                     {
                                         Receita receita = clienteAtual.obterReceita(codigoReceitaInt);
-                                        Console.Write("Quer pagar agora ou deixar na conta? (0 - Pagar Agora | 1 - Deixar na conta): ");
-                                        string tipoPagamento = Console.ReadLine();
-                                        int tipoPagamentoInt = Int32.Parse(tipoPagamento);
-                                        if (tipoPagamentoInt == 0)
-                                        {
-                                            //Adicionar á fila de atendimento
-                                            clienteAtual.pagar(farmacia, receita.Produtos, true);
-                                        }
-                                        else
-                                        {
-                                            //Adicionar á fila de atendimento
-                                            clienteAtual.adicionarConta(farmacia, receita.Produtos, true);
-                                        }
+                                        Console.WriteLine("\nA sua encomenda foi adicionada à fila de atendimento!");
+                                        PreVenda prevenda = new PreVenda(clienteAtual, farmacia, receita.Produtos, true);
+                                        filaAtendimento.Enqueue(prevenda);
                                         acabou1 = true;
                                     }
                                     else
@@ -1461,6 +1463,101 @@ namespace LP_TP1F2_Farmacia
                                     }
                                 }
                             }
+                            break;
+                        }
+                    case "7":
+                        {
+                            //BLOQUEAR APENAS PARA O FUNIONÁRIO VER
+                            Console.Clear();
+                            Console.WriteLine("PRÓXIMO CLIENTE\n");
+                            PreVenda proximo = filaAtendimento.Peek();
+                            Console.WriteLine("Id do cliente: " + proximo.Cliente.Id);
+                            Console.WriteLine("Nome do cliente: " + proximo.Cliente.Nome);
+                            Console.WriteLine("Produtos encomendados:\n");
+                            float total = 0;
+                            foreach (Produto produto in proximo.Encomenda)
+                            {
+                                int quantidade = 0;
+                                float precoTemp;
+                                foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                                {
+                                    quantidade += validadeQuantidade.Quantidade;
+                                }
+                                if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
+                                {
+                                    precoTemp = produto.Preco;
+                                    precoTemp += produto.Preco * 0.01f;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                else if (produto.SubCategoria == "Injecao")
+                                {
+                                    precoTemp = produto.Preco;
+                                    precoTemp += 1;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                else if (produto.SubCategoria == "Higiene")
+                                {
+                                    precoTemp = produto.Preco;
+                                    precoTemp += produto.Preco * 0.13f;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                else if (produto.SubCategoria == "Hipoalergenico")
+                                {
+                                    precoTemp = produto.Preco;
+                                    precoTemp += produto.Preco * 0.06f;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                else if (produto.SubCategoria == "Animal")
+                                {
+                                    precoTemp = produto.Preco;
+                                    precoTemp += 1;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                else if (produto.SubCategoria == "Beleza")
+                                {
+                                    precoTemp = produto.Preco;
+                                    precoTemp += produto.Preco * 0.23f;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                else
+                                {
+                                    precoTemp = produto.Preco;
+                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                    total += precoTemp * quantidade;
+                                }
+                                Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + precoTemp + " euros - " + quantidade + " unidades");
+                            }
+                            Console.WriteLine("\nTOTAL: " + total + " euros");
+                            Console.Write("\nComo o cliente deseja pagar? (0 - Pagar Agora | 1 - Deixar na conta): ");
+                            string tipoPagamento = Console.ReadLine();
+                            int tipoPagamentoInt = Int32.Parse(tipoPagamento);
+                            if (tipoPagamentoInt == 0)
+                            {
+                                proximo.Cliente.pagar(farmacia, proximo.Encomenda, proximo.IsReceita);
+                            }
+                            else
+                            {
+                                proximo.Cliente.adicionarConta(farmacia, proximo.Encomenda, proximo.IsReceita);
+                            }
+                            filaAtendimento.Dequeue();
+                            while (Console.KeyAvailable)
+                            {
+                                Console.ReadKey(false);
+                            }
+                            Console.ReadKey();
                             break;
                         }
                     case "100":
