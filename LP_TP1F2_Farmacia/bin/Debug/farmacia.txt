@@ -1,0 +1,397 @@
+0
+0
+14/12/2017 00:00:00
+10000
+2
+True
+0
+0
+100
+1
+Rebeca
+0
+1
+False
+6
+M
+True
+Opiácio
+1
+Benuron
+5
+Opiacio
+0
+2
+25/12/2018 00:00:00
+M
+True
+Anti-Inflamatório
+3
+Antiflan
+7
+AntiInflamatorio
+0
+2
+25/12/2018 00:00:00
+M
+True
+Injeções
+5
+Vacina
+9
+Injecao
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Pasta de Dentes
+7
+Colgate
+11
+Higiene
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Papa sem Glúten
+9
+Papa s/ Glúten
+13
+Hipoalergenico
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Desparazitante de animal
+11
+Scalibor
+15
+Animal
+0
+2
+25/12/2018 00:00:00
+B
+False
+Creme hedratante
+13
+Dove
+17
+Beleza
+0
+2
+25/12/2018 00:00:00
+False
+0
+0
+200
+2
+Toninha
+0
+1
+False
+6
+M
+True
+Opiácio
+1
+Benuron
+5
+Opiacio
+0
+2
+25/12/2018 00:00:00
+M
+True
+Anti-Inflamatório
+3
+Antiflan
+7
+AntiInflamatorio
+0
+2
+25/12/2018 00:00:00
+M
+True
+Injeções
+5
+Vacina
+9
+Injecao
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Pasta de Dentes
+7
+Colgate
+11
+Higiene
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Papa sem Glúten
+9
+Papa s/ Glúten
+13
+Hipoalergenico
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Desparazitante de animal
+11
+Scalibor
+15
+Animal
+0
+2
+25/12/2018 00:00:00
+B
+False
+Creme hedratante
+13
+Dove
+17
+Beleza
+0
+2
+25/12/2018 00:00:00
+False
+0
+0
+300
+3
+Ramira
+0
+1
+False
+6
+M
+True
+Opiácio
+1
+Benuron
+5
+Opiacio
+0
+2
+25/12/2018 00:00:00
+M
+True
+Anti-Inflamatório
+3
+Antiflan
+7
+AntiInflamatorio
+0
+2
+25/12/2018 00:00:00
+M
+True
+Injeções
+5
+Vacina
+9
+Injecao
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Pasta de Dentes
+7
+Colgate
+11
+Higiene
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Papa sem Glúten
+9
+Papa s/ Glúten
+13
+Hipoalergenico
+0
+2
+25/12/2018 00:00:00
+HA
+False
+Desparazitante de animal
+11
+Scalibor
+15
+Animal
+0
+2
+25/12/2018 00:00:00
+B
+False
+Creme hedratante
+13
+Dove
+17
+Beleza
+0
+2
+25/12/2018 00:00:00
+2
+1
+Toninho
+Chefe
+2
+Hédinho
+Base
+3
+Carlinhos
+Base
+13
+M
+True
+Opiácio
+1
+Benuron
+5
+Opiacio
+0
+100
+25/12/2018 00:00:00
+M
+True
+Opiácio
+2
+Brufen
+6
+Opiacio
+0
+100
+25/12/2018 00:00:00
+M
+True
+Anti-Inflamatório
+3
+Antiflan
+7
+AntiInflamatorio
+0
+100
+25/12/2018 00:00:00
+M
+True
+Anti-Inflamatório
+4
+Ceprofen
+8
+AntiInflamatorio
+0
+100
+25/12/2018 00:00:00
+M
+True
+Injeções
+5
+Vacina
+9
+Injecao
+0
+100
+25/12/2018 00:00:00
+M
+True
+Injeções
+6
+Noregyna
+10
+Injecao
+0
+100
+25/12/2018 00:00:00
+HA
+False
+Pasta de Dentes
+7
+Colgate
+11
+Higiene
+0
+100
+25/12/2018 00:00:00
+HA
+False
+Champô
+8
+Linic
+12
+Higiene
+0
+100
+25/12/2018 00:00:00
+HA
+False
+Papa sem Glúten
+9
+Papa s/ Glúten
+13
+Hipoalergenico
+0
+100
+25/12/2018 00:00:00
+HA
+False
+Papa sem Amido
+10
+Papa s/ Amido
+14
+Hipoalergenico
+0
+100
+25/12/2018 00:00:00
+HA
+False
+Desparazitante de animal
+11
+Scalibor
+15
+Animal
+0
+100
+25/12/2018 00:00:00
+HA
+False
+Desparazitante de animal
+12
+Amflee
+16
+Animal
+0
+100
+25/12/2018 00:00:00
+B
+False
+Creme hedratante
+13
+Dove
+17
+Beleza
+0
+100
+25/12/2018 00:00:00
+B
+False
+Creme hedratante
+14
+Nivea
+18
+Beleza
+0
+100
+25/12/2018 00:00:00
+-1

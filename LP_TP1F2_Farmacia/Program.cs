@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 /*
     Detalhes:
@@ -13,8 +14,6 @@ using System.Threading.Tasks;
             - opiáceos que só podem ser levantados ao máximo 5 por semana (se na receita forem receitados 20, quer dizer que
             só ao fim de 4 semanas aquela  parte da receita pode ser de facto levantada totalmente);
     - Receita que é basicamente mas que só acaba quando todos os medicamentos forem levantados;
-    - Todos os dados têm de ser carregados a partir de ficheiros. Como tal também devem haver métodos que permitam guardar 
-    os dados em ficheiros;
 */
 
 namespace LP_TP1F2_Farmacia
@@ -984,20 +983,17 @@ namespace LP_TP1F2_Farmacia
 
     struct PreVenda
     {
-        private Cliente cliente;
-        private Farmacia farmacia;
+        private int idCliente;
         private List<Produto> encomenda;
         private bool isReceita;
         
-        public Farmacia Farmacia { get => farmacia; set => farmacia = value; }
         public List<Produto> Encomenda { get => encomenda; set => encomenda = value; }
-        public Cliente Cliente { get => cliente; set => cliente = value; }
         public bool IsReceita { get => isReceita; set => isReceita = value; }
+        public int IdCliente { get => idCliente; set => idCliente = value; }
 
-        public PreVenda(Cliente cliente, Farmacia farmacia, List<Produto> encomenda, bool isReceita)
+        public PreVenda(int idCliente, List<Produto> encomenda, bool isReceita)
         {
-            this.cliente = cliente;
-            this.farmacia = farmacia;
+            this.idCliente = idCliente;
             this.encomenda = encomenda;
             this.isReceita = isReceita;
         }
@@ -1007,6 +1003,360 @@ namespace LP_TP1F2_Farmacia
     {
         static void Main(string[] args)
         {
+            /// <summary>
+            /// Escreve toda a Farmácia num ficheiro
+            /// </summary>
+            void escreverFarmaciaFicheiro(string nomeFicheiro, Farmacia farmaciaGuardar)
+            {
+                StreamWriter streamWriter;
+                try
+                {
+                    streamWriter = File.CreateText(nomeFicheiro);
+                    streamWriter.WriteLine(farmaciaGuardar.CausaAnimal);
+                    streamWriter.WriteLine(farmaciaGuardar.ContadorVentas);
+                    streamWriter.WriteLine(farmaciaGuardar.Data);
+                    streamWriter.WriteLine(farmaciaGuardar.Dinheiro);
+                    streamWriter.WriteLine(farmaciaGuardar.Clientes.Count-1);
+                    foreach (Cliente cliente in farmaciaGuardar.Clientes)
+                    {
+                        streamWriter.WriteLine(cliente.CartaoFarmacias);
+                        streamWriter.WriteLine(cliente.CausaAnimal);
+                        streamWriter.WriteLine(cliente.Conta);
+                        streamWriter.WriteLine(cliente.Dinheiro);
+                        streamWriter.WriteLine(cliente.Id);
+                        streamWriter.WriteLine(cliente.Nome);
+                        streamWriter.WriteLine(cliente.Receitas.Count-1);
+                        foreach(Receita receita in cliente.Receitas)
+                        {
+                            streamWriter.WriteLine(receita.Codigo);
+                            streamWriter.WriteLine(receita.Entregue);
+                            streamWriter.WriteLine(receita.Produtos.Count-1);
+                            foreach(Produto produtoReceita in receita.Produtos)
+                            {
+                                streamWriter.WriteLine(produtoReceita.Categoria);
+                                streamWriter.WriteLine(produtoReceita.Comparticipacao);
+                                streamWriter.WriteLine(produtoReceita.Descrição);
+                                streamWriter.WriteLine(produtoReceita.Id);
+                                streamWriter.WriteLine(produtoReceita.Nome);
+                                streamWriter.WriteLine(produtoReceita.Preco);
+                                streamWriter.WriteLine(produtoReceita.SubCategoria);
+                                streamWriter.WriteLine(produtoReceita.ValidadesQuantidades.Count-1);
+                                foreach(ValidadeQuantidade validadeQuantidade in produtoReceita.ValidadesQuantidades)
+                                {
+                                    streamWriter.WriteLine(validadeQuantidade.Quantidade);
+                                    streamWriter.WriteLine(validadeQuantidade.Validade);
+                                }
+                            }
+                        }
+                    }
+                    streamWriter.WriteLine(farmaciaGuardar.Funcionarios.Count - 1);
+                    foreach(Funcionario funcionario in farmaciaGuardar.Funcionarios)
+                    {
+                        streamWriter.WriteLine(funcionario.Id);
+                        streamWriter.WriteLine(funcionario.Nome);
+                        streamWriter.WriteLine(funcionario.Tipo);
+                    }
+                    streamWriter.WriteLine(farmaciaGuardar.Medicamentos.Count - 1);
+                    foreach(Produto produto in farmaciaGuardar.Medicamentos)
+                    {
+                        streamWriter.WriteLine(produto.Categoria);
+                        streamWriter.WriteLine(produto.Comparticipacao);
+                        streamWriter.WriteLine(produto.Descrição);
+                        streamWriter.WriteLine(produto.Id);
+                        streamWriter.WriteLine(produto.Nome);
+                        streamWriter.WriteLine(produto.Preco);
+                        streamWriter.WriteLine(produto.SubCategoria);
+                        streamWriter.WriteLine(produto.ValidadesQuantidades.Count - 1);
+                        foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                        {
+                            streamWriter.WriteLine(validadeQuantidade.Quantidade);
+                            streamWriter.WriteLine(validadeQuantidade.Validade);
+                        }
+                    }
+                    streamWriter.WriteLine(farmaciaGuardar.Vendas.Count - 1);
+                    foreach (Venda venda in farmaciaGuardar.Vendas)
+                    {
+                        streamWriter.WriteLine(venda.Id);
+                        streamWriter.WriteLine(venda.IdCliente);
+                        streamWriter.WriteLine(venda.IsReceita);
+                        streamWriter.WriteLine(venda.TotalPago);
+                        streamWriter.WriteLine(venda.Produtos.Count-1);
+                        foreach (Produto produto in venda.Produtos)
+                        {
+                            streamWriter.WriteLine(produto.Categoria);
+                            streamWriter.WriteLine(produto.Comparticipacao);
+                            streamWriter.WriteLine(produto.Descrição);
+                            streamWriter.WriteLine(produto.Id);
+                            streamWriter.WriteLine(produto.Nome);
+                            streamWriter.WriteLine(produto.Preco);
+                            streamWriter.WriteLine(produto.SubCategoria);
+                            streamWriter.WriteLine(produto.ValidadesQuantidades.Count - 1);
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                streamWriter.WriteLine(validadeQuantidade.Quantidade);
+                                streamWriter.WriteLine(validadeQuantidade.Validade);
+                            }
+                        }
+                    }
+                    streamWriter.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            /// <summary>
+            /// Lê toda a Farmácia dum ficheiro
+            /// </summary>
+            Farmacia lerFarmaciaFicheiro(string nomeFicheiro)
+            {
+                StreamReader streamReader;
+                string linha;
+                List<Cliente> clientesFarmacia = new List<Cliente>();
+                List<Funcionario> funcionariosFarmacia = new List<Funcionario>();
+                List<Produto> produtosFarmacia = new List<Produto>();
+                List<Venda> vendasFarmacia = new List<Venda>();
+                int contadorVendasFarmacia = 0;
+                float dinheiroFarmacia = 0, causaAnimalFarmacia = 0;
+                DateTime dataFarmacia = new DateTime(1, 1, 1);
+                try
+                {
+                    streamReader = new StreamReader(nomeFicheiro);
+                    while ((linha = streamReader.ReadLine()) != null)
+                    {
+                        causaAnimalFarmacia = float.Parse(linha);
+                        contadorVendasFarmacia = int.Parse(streamReader.ReadLine());
+                        dataFarmacia = DateTime.Parse(streamReader.ReadLine());
+                        dinheiroFarmacia = float.Parse(streamReader.ReadLine());
+                        int auxQuantClientes = int.Parse(streamReader.ReadLine());
+                        if (auxQuantClientes >= 0)
+                        {
+                            for (int a = 0; a <= auxQuantClientes; a++)
+                            {
+                                bool cartaoFarmaciasCliente = bool.Parse(streamReader.ReadLine());
+                                int causaAnimalCliente = int.Parse(streamReader.ReadLine());
+                                float contaCliente = float.Parse(streamReader.ReadLine());
+                                float dinheiroCliente = float.Parse(streamReader.ReadLine());
+                                int idCliente = int.Parse(streamReader.ReadLine());
+                                string nomeCliente = streamReader.ReadLine();
+                                int auxQuantReceitas = int.Parse(streamReader.ReadLine());
+                                List<Receita> receitasCliente = new List<Receita>();
+                                for (int b = 0; b <= auxQuantReceitas; b++)
+                                {
+                                    int codigoReceita = int.Parse(streamReader.ReadLine());
+                                    bool entregueReceita = bool.Parse(streamReader.ReadLine());
+                                    int auxQuantProdutosReceita = int.Parse(streamReader.ReadLine());
+                                    List<Produto> produtosReceitaF = new List<Produto>();
+                                    for (int c = 0; c <= auxQuantProdutosReceita; c++)
+                                    {
+                                        string categoriaProduto = streamReader.ReadLine();
+                                        bool comparticipacaoProduto = bool.Parse(streamReader.ReadLine());
+                                        string descricaoProduto = streamReader.ReadLine();
+                                        int idProduto = int.Parse(streamReader.ReadLine());
+                                        string nomeProduto = streamReader.ReadLine();
+                                        float precoProduto = float.Parse(streamReader.ReadLine());
+                                        string subCategoriaProduto = streamReader.ReadLine();
+                                        int auxQuantValidadesQuantidades = int.Parse(streamReader.ReadLine());
+                                        List<ValidadeQuantidade> validadesQuantidadesProduto = new List<ValidadeQuantidade>();
+                                        for (int d = 0; d <= auxQuantValidadesQuantidades; d++)
+                                        {
+                                            int quantidadeValidadeQuantidade = int.Parse(streamReader.ReadLine());
+                                            DateTime validadeValidadeQuantidade = DateTime.Parse(streamReader.ReadLine());
+                                            ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
+                                            validadesQuantidadesProduto.Add(validadeQuantidadeLida);
+                                        }
+                                        Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                        produtosReceitaF.Add(produtoLido);
+                                    }
+                                    Receita receitaLida = new Receita(codigoReceita, produtosReceitaF, entregueReceita);
+                                    receitasCliente.Add(receitaLida);
+                                }
+                                Cliente clienteLido = new Cliente(dinheiroCliente, receitasCliente, cartaoFarmaciasCliente, contaCliente, causaAnimalCliente, idCliente, nomeCliente);
+                                clientesFarmacia.Add(clienteLido);
+                            }
+                        }
+                        int auxQuantFuncionarios = int.Parse(streamReader.ReadLine());
+                        if (auxQuantFuncionarios >= 0)
+                        {
+                            for (int e = 0; e <= auxQuantFuncionarios; e++)
+                            {
+                                int idFuncionario = int.Parse(streamReader.ReadLine());
+                                string nomeFuncionario = streamReader.ReadLine();
+                                string tipoFuncionario = streamReader.ReadLine();
+                                Funcionario funcionarioLido = new Funcionario(tipoFuncionario, idFuncionario, nomeFuncionario);
+                                funcionariosFarmacia.Add(funcionarioLido);
+                            }
+                        }
+                        int auxQuantProdutos = int.Parse(streamReader.ReadLine());
+                        if (auxQuantProdutos >= 0)
+                        {
+                            for (int f = 0; f <= auxQuantProdutos; f++)
+                            {
+                                string categoriaProduto = streamReader.ReadLine();
+                                bool comparticipacaoProduto = bool.Parse(streamReader.ReadLine());
+                                string descricaoProduto = streamReader.ReadLine();
+                                int idProduto = int.Parse(streamReader.ReadLine());
+                                string nomeProduto = streamReader.ReadLine();
+                                float precoProduto = float.Parse(streamReader.ReadLine());
+                                string subCategoriaProduto = streamReader.ReadLine();
+                                int auxQuantValidadesQuantidades = int.Parse(streamReader.ReadLine());
+                                List<ValidadeQuantidade> validadesQuantidadesProduto = new List<ValidadeQuantidade>();
+                                for (int g = 0; g <= auxQuantValidadesQuantidades; g++)
+                                {
+                                    int quantidadeValidadeQuantidade = int.Parse(streamReader.ReadLine());
+                                    DateTime validadeValidadeQuantidade = DateTime.Parse(streamReader.ReadLine());
+                                    ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
+                                    validadesQuantidadesProduto.Add(validadeQuantidadeLida);
+                                }
+                                Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                produtosFarmacia.Add(produtoLido);
+                            }
+                        }
+                        int auxQuantVendas = int.Parse(streamReader.ReadLine());
+                        if (auxQuantVendas >= 0)
+                        {
+                            for (int h = 0; h <= auxQuantVendas; h++)
+                            {
+                                int idVenda = int.Parse(streamReader.ReadLine());
+                                int idClienteVenda = int.Parse(streamReader.ReadLine());
+                                bool isReceitaVenda = bool.Parse(streamReader.ReadLine());
+                                float totalPagoVenda = float.Parse(streamReader.ReadLine());
+                                int auxQuantProdutosVenda = int.Parse(streamReader.ReadLine());
+                                List<Produto> produtosVenda = new List<Produto>();
+                                for (int i = 0; i <= auxQuantProdutosVenda; i++)
+                                {
+                                    string categoriaProduto = streamReader.ReadLine();
+                                    bool comparticipacaoProduto = bool.Parse(streamReader.ReadLine());
+                                    string descricaoProduto = streamReader.ReadLine();
+                                    int idProduto = int.Parse(streamReader.ReadLine());
+                                    string nomeProduto = streamReader.ReadLine();
+                                    float precoProduto = float.Parse(streamReader.ReadLine());
+                                    string subCategoriaProduto = streamReader.ReadLine();
+                                    int auxQuantValidadesQuantidades = int.Parse(streamReader.ReadLine());
+                                    List<ValidadeQuantidade> validadesQuantidadesProduto = new List<ValidadeQuantidade>();
+                                    for (int g = 0; g <= auxQuantValidadesQuantidades; g++)
+                                    {
+                                        int quantidadeValidadeQuantidade = int.Parse(streamReader.ReadLine());
+                                        DateTime validadeValidadeQuantidade = DateTime.Parse(streamReader.ReadLine());
+                                        ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
+                                        validadesQuantidadesProduto.Add(validadeQuantidadeLida);
+                                    }
+                                    Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                    produtosVenda.Add(produtoLido);
+                                }
+                                Venda vendaLida = new Venda(idVenda, idClienteVenda, produtosVenda, totalPagoVenda, isReceitaVenda);
+                                vendasFarmacia.Add(vendaLida);
+                            }
+                        }
+                    }
+                    streamReader.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                Farmacia farmaciaFicheiro = new Farmacia(funcionariosFarmacia, clientesFarmacia, produtosFarmacia, contadorVendasFarmacia, vendasFarmacia, dinheiroFarmacia, dataFarmacia, causaAnimalFarmacia);
+                return farmaciaFicheiro;
+            }
+
+            /// <summary>
+            /// Escreve toda a Fila de Atendimento num ficheiro
+            /// </summary>
+            void escreverFilaAtendimentoFicheiro(string nomeFicheiro, Queue<PreVenda> filaAtendimentoGuardar)
+            {
+                StreamWriter streamWriter;
+                try
+                {
+                    streamWriter = File.CreateText(nomeFicheiro);
+                    foreach(PreVenda prevenda in filaAtendimentoGuardar)
+                    {
+                        streamWriter.WriteLine(prevenda.IdCliente);
+                        streamWriter.WriteLine(prevenda.IsReceita);
+                        streamWriter.WriteLine(prevenda.Encomenda.Count-1);
+                        foreach (Produto produto in prevenda.Encomenda)
+                        {
+                            streamWriter.WriteLine(produto.Categoria);
+                            streamWriter.WriteLine(produto.Comparticipacao);
+                            streamWriter.WriteLine(produto.Descrição);
+                            streamWriter.WriteLine(produto.Id);
+                            streamWriter.WriteLine(produto.Nome);
+                            streamWriter.WriteLine(produto.Preco);
+                            streamWriter.WriteLine(produto.SubCategoria);
+                            streamWriter.WriteLine(produto.ValidadesQuantidades.Count - 1);
+                            foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                            {
+                                streamWriter.WriteLine(validadeQuantidade.Quantidade);
+                                streamWriter.WriteLine(validadeQuantidade.Validade);
+                            }
+                        }
+                    }
+                    streamWriter.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            /// <summary>
+            /// Lê toda a Fila de Atendimento dum ficheiro
+            /// </summary>
+            Queue<PreVenda> lerFilaAtendimentoFicheiro(string nomeFicheiro)
+            {
+                StreamReader streamReader;
+                string linha;
+                Queue<PreVenda> filaAtendimentoFicheiro = new Queue<PreVenda>();
+                try
+                {
+                    streamReader = new StreamReader(nomeFicheiro);
+                    while ((linha = streamReader.ReadLine()) != null)
+                    {
+                        int idClienteFA = int.Parse(linha);
+                        bool isReceitaFA= bool.Parse(streamReader.ReadLine());
+                        int auxQuantProdutosEncomendadosFA = int.Parse(streamReader.ReadLine());
+                        List<Produto> produtosFA = new List<Produto>();
+                        if (auxQuantProdutosEncomendadosFA >= 0)
+                        {
+                            for(int a = 0; a <= auxQuantProdutosEncomendadosFA; a++)
+                            {
+                                string categoriaProduto = streamReader.ReadLine();
+                                bool comparticipacaoProduto = bool.Parse(streamReader.ReadLine());
+                                string descricaoProduto = streamReader.ReadLine();
+                                int idProduto = int.Parse(streamReader.ReadLine());
+                                string nomeProduto = streamReader.ReadLine();
+                                float precoProduto = float.Parse(streamReader.ReadLine());
+                                string subCategoriaProduto = streamReader.ReadLine();
+                                int auxQuantValidadesQuantidades = int.Parse(streamReader.ReadLine());
+                                List<ValidadeQuantidade> validadesQuantidadesProduto = new List<ValidadeQuantidade>();
+                                for (int g = 0; g <= auxQuantValidadesQuantidades; g++)
+                                {
+                                    int quantidadeValidadeQuantidade = int.Parse(streamReader.ReadLine());
+                                    DateTime validadeValidadeQuantidade = DateTime.Parse(streamReader.ReadLine());
+                                    ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
+                                    validadesQuantidadesProduto.Add(validadeQuantidadeLida);
+                                }
+                                Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                produtosFA.Add(produtoLido);
+                            }
+                        }
+                        PreVenda preVendaLida = new PreVenda(idClienteFA, produtosFA, isReceitaFA);
+                        filaAtendimentoFicheiro.Enqueue(preVendaLida);
+                    }
+                    streamReader.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                return filaAtendimentoFicheiro;
+            }
+
+            string diretorioAtual = Directory.GetCurrentDirectory();
+            string caminhoFarmacia = diretorioAtual + "/farmacia.txt";
+            string caminhoFilaAtendimento = diretorioAtual + "/filaAtendimento.txt";
+
+            /*
             Funcionario func1 = new Funcionario("Chefe", 1, "Toninho");
             Funcionario func2 = new Funcionario("Base", 2, "Hédinho");
             Funcionario func3 = new Funcionario("Base", 3, "Carlinhos");
@@ -1126,10 +1476,16 @@ namespace LP_TP1F2_Farmacia
 
             List<Venda> vendas = new List<Venda>();
 
-            DateTime dataFarmacia = new DateTime(2017, 12, 14);
-            Farmacia farmacia = new Farmacia(funcionarios, clientes, produtos, 0, vendas, 10000.0f, dataFarmacia, 0.0f);
+            DateTime data = new DateTime(2017, 12, 14);
+            Farmacia farmacia = new Farmacia(funcionarios, clientes, produtos, 0, vendas, 10000.0f, data, 0.0f);
 
             Queue<PreVenda> filaAtendimento = new Queue<PreVenda>();
+
+            escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+            escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
+            */
+            Farmacia farmacia = lerFarmaciaFicheiro(caminhoFarmacia);
+            Queue<PreVenda> filaAtendimento = lerFilaAtendimentoFicheiro(caminhoFilaAtendimento);
 
             Cliente clienteAtual = null;
             Funcionario funcionarioAtual = null;
@@ -1196,6 +1552,7 @@ namespace LP_TP1F2_Farmacia
                 {
                     Console.WriteLine("\nValor a dever: " + (clienteAtual.Conta + clienteAtual.CausaAnimal) + " euros. Vá para a opção 100 para pagar o que deve.");
                     Console.WriteLine("Fundos angariados para a causa \"Salvem as ratazanas de laboratório\": " + farmacia.CausaAnimal + " euros");
+                    Console.WriteLine("O seu saldo: " + clienteAtual.Dinheiro + " euros");
                 }
                 Console.WriteLine("\n----------MENU----------");
                 Console.WriteLine("\nEscolha uma opção:");
@@ -1261,9 +1618,11 @@ namespace LP_TP1F2_Farmacia
                                         Console.WriteLine("\nA sua encomenda foi adicionada à fila de atendimento!");
                                     }
                                 }
-                                PreVenda prevenda = new PreVenda(clienteAtual, farmacia, encomenda, false);
+                                PreVenda prevenda = new PreVenda(clienteAtual.Id, encomenda, false);
                                 filaAtendimento.Enqueue(prevenda);
                             }
+                            escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+                            escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
                             while (Console.KeyAvailable)
                             {
                                 Console.ReadKey(false);
@@ -1291,7 +1650,7 @@ namespace LP_TP1F2_Farmacia
                                     {
                                         Receita receita = clienteAtual.obterReceita(codigoReceitaInt);
                                         Console.WriteLine("\nA sua encomenda foi adicionada à fila de atendimento!");
-                                        PreVenda prevenda = new PreVenda(clienteAtual, farmacia, receita.Produtos, true);
+                                        PreVenda prevenda = new PreVenda(clienteAtual.Id, receita.Produtos, true);
                                         filaAtendimento.Enqueue(prevenda);
                                         acabou1 = true;
                                     }
@@ -1306,6 +1665,8 @@ namespace LP_TP1F2_Farmacia
                                     }
                                 }
                             }
+                            escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+                            escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
                             while (Console.KeyAvailable)
                             {
                                 Console.ReadKey(false);
@@ -1387,6 +1748,7 @@ namespace LP_TP1F2_Farmacia
                                             }
                                         }
                                         clienteAtual.devolver(farmacia, devolucao, codVendaInt);
+                                        escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
                                     }
                                     else
                                     {
@@ -1461,98 +1823,108 @@ namespace LP_TP1F2_Farmacia
                                     {
                                         acabou1 = true;
                                     }
+                                    escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
                                 }
                             }
                             break;
                         }
                     case "7":
                         {
-                            //BLOQUEAR APENAS PARA O FUNIONÁRIO VER
                             Console.Clear();
-                            Console.WriteLine("PRÓXIMO CLIENTE\n");
-                            PreVenda proximo = filaAtendimento.Peek();
-                            Console.WriteLine("Id do cliente: " + proximo.Cliente.Id);
-                            Console.WriteLine("Nome do cliente: " + proximo.Cliente.Nome);
-                            Console.WriteLine("Produtos encomendados:\n");
-                            float total = 0;
-                            foreach (Produto produto in proximo.Encomenda)
+                            if (funcionarioAtual == null)
                             {
-                                int quantidade = 0;
-                                float precoTemp;
-                                foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
-                                {
-                                    quantidade += validadeQuantidade.Quantidade;
-                                }
-                                if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
-                                {
-                                    precoTemp = produto.Preco;
-                                    precoTemp += produto.Preco * 0.01f;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                else if (produto.SubCategoria == "Injecao")
-                                {
-                                    precoTemp = produto.Preco;
-                                    precoTemp += 1;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                else if (produto.SubCategoria == "Higiene")
-                                {
-                                    precoTemp = produto.Preco;
-                                    precoTemp += produto.Preco * 0.13f;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                else if (produto.SubCategoria == "Hipoalergenico")
-                                {
-                                    precoTemp = produto.Preco;
-                                    precoTemp += produto.Preco * 0.06f;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                else if (produto.SubCategoria == "Animal")
-                                {
-                                    precoTemp = produto.Preco;
-                                    precoTemp += 1;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                else if (produto.SubCategoria == "Beleza")
-                                {
-                                    precoTemp = produto.Preco;
-                                    precoTemp += produto.Preco * 0.23f;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                else
-                                {
-                                    precoTemp = produto.Preco;
-                                    if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                    if (clienteAtual.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                    total += precoTemp * quantidade;
-                                }
-                                Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + precoTemp + " euros - " + quantidade + " unidades");
-                            }
-                            Console.WriteLine("\nTOTAL: " + total + " euros");
-                            Console.Write("\nComo o cliente deseja pagar? (0 - Pagar Agora | 1 - Deixar na conta): ");
-                            string tipoPagamento = Console.ReadLine();
-                            int tipoPagamentoInt = Int32.Parse(tipoPagamento);
-                            if (tipoPagamentoInt == 0)
-                            {
-                                proximo.Cliente.pagar(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                Console.WriteLine("Não tem permissão para usar esta função.");
                             }
                             else
                             {
-                                proximo.Cliente.adicionarConta(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                Console.WriteLine("PRÓXIMO CLIENTE\n");
+                                PreVenda proximo = filaAtendimento.Peek();
+                                Cliente clienteQueCompra = farmacia.obterCliente(proximo.IdCliente);
+                                Console.WriteLine("Id do cliente: " + clienteQueCompra.Id);
+                                Console.WriteLine("Nome do cliente: " + clienteQueCompra.Nome);
+                                Console.WriteLine("Produtos encomendados:\n");
+                                float total = 0;
+                                foreach (Produto produto in proximo.Encomenda)
+                                {
+                                    int quantidade = 0;
+                                    float precoTemp;
+                                    foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                                    {
+                                        quantidade += validadeQuantidade.Quantidade;
+                                    }
+                                    if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
+                                    {
+                                        precoTemp = produto.Preco;
+                                        precoTemp += produto.Preco * 0.01f;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    else if (produto.SubCategoria == "Injecao")
+                                    {
+                                        precoTemp = produto.Preco;
+                                        precoTemp += 1;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    else if (produto.SubCategoria == "Higiene")
+                                    {
+                                        precoTemp = produto.Preco;
+                                        precoTemp += produto.Preco * 0.13f;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    else if (produto.SubCategoria == "Hipoalergenico")
+                                    {
+                                        precoTemp = produto.Preco;
+                                        precoTemp += produto.Preco * 0.06f;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    else if (produto.SubCategoria == "Animal")
+                                    {
+                                        precoTemp = produto.Preco;
+                                        precoTemp += 1;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    else if (produto.SubCategoria == "Beleza")
+                                    {
+                                        precoTemp = produto.Preco;
+                                        precoTemp += produto.Preco * 0.23f;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    else
+                                    {
+                                        precoTemp = produto.Preco;
+                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
+                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
+                                        total += precoTemp * quantidade;
+                                    }
+                                    Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + precoTemp + " euros - " + quantidade + " unidades");
+                                }
+                                Console.WriteLine("\nTOTAL: " + total + " euros");
+                                Console.Write("\nComo o cliente deseja pagar? (0 - Pagar Agora | 1 - Deixar na conta): ");
+                                string tipoPagamento = Console.ReadLine();
+                                int tipoPagamentoInt = Int32.Parse(tipoPagamento);
+                                if (tipoPagamentoInt == 0)
+                                {
+                                    farmacia.obterCliente(proximo.IdCliente).pagar(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                }
+                                else
+                                {
+                                    farmacia.obterCliente(proximo.IdCliente).adicionarConta(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                }
+                                filaAtendimento.Dequeue();
+                                escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+                                escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
                             }
-                            filaAtendimento.Dequeue();
                             while (Console.KeyAvailable)
                             {
                                 Console.ReadKey(false);
@@ -1563,6 +1935,7 @@ namespace LP_TP1F2_Farmacia
                     case "100":
                         {
                             clienteAtual.pagarConta(farmacia);
+                            escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
                             break;
                         }
                     case "0":
