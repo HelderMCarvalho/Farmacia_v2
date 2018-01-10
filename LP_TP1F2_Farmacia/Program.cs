@@ -88,68 +88,10 @@ namespace LP_TP1F2_Farmacia
                 {
                     quantidadeProduto += validadeQuantidade.Quantidade;
                 }
-                if ((produto.SubCategoria== "AntiInflamatorio") || (produto.SubCategoria== "AntiSeptico"))
+                totalPagar += produto.calculaPreco(quantidadeProduto, isReceita, cartaoFarmacias);
+                if (produto.SubCategoria == "Animal")
                 {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.01f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Injecao")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += 1;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Higiene")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.13f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Hipoalergenico")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.06f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Animal")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += 1;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
                     contAnimal += quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Beleza")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.23f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else
-                {
-                    float precoTemp = produto.Preco;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
                 }
             }
             if (dinheiro >= totalPagar)
@@ -208,68 +150,10 @@ namespace LP_TP1F2_Farmacia
                 {
                     quantidadeProduto += validadeQuantidade.Quantidade;
                 }
-                if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
+                totalPagar += produto.calculaPreco(quantidadeProduto, isReceita, cartaoFarmacias);
+                if (produto.SubCategoria == "Animal")
                 {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.01f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Injecao")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += 1;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Higiene")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.13f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Hipoalergenico")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.06f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Animal")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += 1;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
                     contAnimal += quantidadeProduto;
-                }
-                else if (produto.SubCategoria == "Beleza")
-                {
-                    float precoTemp = produto.Preco;
-                    precoTemp += produto.Preco * 0.23f;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
-                }
-                else
-                {
-                    float precoTemp = produto.Preco;
-                    if (isReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                    if (cartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                    produto.Preco = precoTemp;
-                    totalPagar += produto.Preco * quantidadeProduto;
                 }
             }
             if ((conta + totalPagar) < 50)
@@ -445,16 +329,16 @@ namespace LP_TP1F2_Farmacia
         }
     }
 
-    class Produto
+    abstract class Produto
     {
-        private int id;
-        private string nome;
-        private float preco;
-        private bool comparticipacao;
-        private List<ValidadeQuantidade> validadesQuantidades;
-        private string descrição;
-        private string categoria; //M, HA, B
-        private string subCategoria; //Sub-categoria
+        protected int id;
+        protected string nome;
+        protected float preco;
+        protected bool comparticipacao;
+        protected List<ValidadeQuantidade> validadesQuantidades;
+        protected string descrição;
+        protected string categoria; //M, HA, B
+        protected string subCategoria; //Sub-categoria
 
         public string Nome { get => nome; set => nome = value; }
         public float Preco { get => preco; set => preco = value; }
@@ -475,6 +359,329 @@ namespace LP_TP1F2_Farmacia
             this.descrição = descrição;
             this.categoria = categoria;
             this.subCategoria = subCategoria;
+        }
+
+        /// <summary>
+        /// Função que nunca será usada porque vai ser sempre "Overrided"
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>NADA</returns>
+        public virtual float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            return 0.00f;  //Esta função nunca vai ser usada
+        }
+
+        /// <summary>
+        /// Função que nunca será usada porque vai ser sempre "Overrided"
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>NADA</returns>
+        public virtual float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            return 0.00f;  //Esta função nunca vai ser usada
+        }
+    }
+
+    class Opiacio : Produto
+    {
+        public Opiacio(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = precoFinal * quantidadeProduto;
+            return precoFinal;
+        }
+    }
+
+    class AntiInflamatorio_AntiSeptico : Produto
+    {
+        public AntiInflamatorio_AntiSeptico(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.01f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.01f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+    }
+
+    class Injecao : Produto
+    {
+        public Injecao(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += 1;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += 1;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+    }
+
+    class Higiene : Produto
+    {
+        public Higiene(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.13f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.13f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+    }
+
+    class Hipoalergenico : Produto
+    {
+        public Hipoalergenico(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.06f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.06f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+    }
+
+    class Animal : Produto
+    {
+        public Animal(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += 1;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += 1;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+    }
+
+    class Beleza : Produto
+    {
+        public Beleza(int id, string nome, float preco, bool comparticipacao, List<ValidadeQuantidade> validadesQuantidades, string descrição, string categoria, string subCategoria) : base(id, nome, preco, comparticipacao, validadesQuantidades, descrição, categoria, subCategoria)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPreco(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.23f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            Preco = precoFinal;
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
+        }
+
+        /// <summary>
+        /// Calcula o preço final do produto e multiplica pela quantidade comprada (NÃO atualiza o preço desse produto)
+        /// </summary>
+        /// <param name="quantidadeProduto"></param>
+        /// <param name="isReceita"></param>
+        /// <param name="cartaoFarmacias"></param>
+        /// <returns>Preço final do (preço * quantidade) do produto</returns>
+        public override float calculaPrecoSemMudar(int quantidadeProduto, bool isReceita, bool cartaoFarmacias)
+        {
+            float precoFinal = Preco;
+            precoFinal += Preco * 0.23f;
+            if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
+            if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
+            precoFinal = Preco * quantidadeProduto;
+            return precoFinal;
         }
     }
 
@@ -1109,7 +1316,7 @@ namespace LP_TP1F2_Farmacia
             /// <summary>
             /// Lê toda a Farmácia dum ficheiro
             /// </summary>
-            Farmacia lerFarmaciaFicheiro(string nomeFicheiro)
+            /*Farmacia lerFarmaciaFicheiro(string nomeFicheiro)
             {
                 StreamReader streamReader;
                 string linha;
@@ -1259,6 +1466,7 @@ namespace LP_TP1F2_Farmacia
                 Farmacia farmaciaFicheiro = new Farmacia(funcionariosFarmacia, clientesFarmacia, produtosFarmacia, contadorVendasFarmacia, vendasFarmacia, dinheiroFarmacia, dataFarmacia, causaAnimalFarmacia);
                 return farmaciaFicheiro;
             }
+            */
 
             /// <summary>
             /// Escreve toda a Fila de Atendimento num ficheiro
@@ -1302,7 +1510,7 @@ namespace LP_TP1F2_Farmacia
             /// <summary>
             /// Lê toda a Fila de Atendimento dum ficheiro
             /// </summary>
-            Queue<PreVenda> lerFilaAtendimentoFicheiro(string nomeFicheiro)
+            /*Queue<PreVenda> lerFilaAtendimentoFicheiro(string nomeFicheiro)
             {
                 StreamReader streamReader;
                 string linha;
@@ -1351,12 +1559,13 @@ namespace LP_TP1F2_Farmacia
                 }
                 return filaAtendimentoFicheiro;
             }
+            */
 
             string diretorioAtual = Directory.GetCurrentDirectory();
             string caminhoFarmacia = diretorioAtual + "/farmacia.txt";
             string caminhoFilaAtendimento = diretorioAtual + "/filaAtendimento.txt";
 
-            /*
+            
             Funcionario func1 = new Funcionario("Chefe", 1, "Toninho");
             Funcionario func2 = new Funcionario("Base", 2, "Hédinho");
             Funcionario func3 = new Funcionario("Base", 3, "Carlinhos");
@@ -1412,20 +1621,20 @@ namespace LP_TP1F2_Farmacia
             List<ValidadeQuantidade> validadesQuantidades14 = new List<ValidadeQuantidade>();
             validadesQuantidades14.Add(validadeQuantidade14);
 
-            Produto prod1 = new Produto(1, "Benuron", 5.0f, true, validadesQuantidades1, "Opiácio", "M", "Opiacio");
-            Produto prod2 = new Produto(2, "Brufen", 6.0f, true, validadesQuantidades2, "Opiácio", "M", "Opiacio");
-            Produto prod3 = new Produto(3, "Antiflan", 7.0f, true, validadesQuantidades3, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod4 = new Produto(4, "Ceprofen", 8.0f, true, validadesQuantidades4, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod5 = new Produto(5, "Vacina", 9.0f, true, validadesQuantidades5, "Injeções", "M", "Injecao");
-            Produto prod6 = new Produto(6, "Noregyna", 10.0f, true, validadesQuantidades6, "Injeções", "M", "Injecao");
-            Produto prod7 = new Produto(7, "Colgate", 11.0f, false, validadesQuantidades7, "Pasta de Dentes", "HA", "Higiene");
-            Produto prod8 = new Produto(8, "Linic", 12.0f, false, validadesQuantidades8, "Champô", "HA", "Higiene");
-            Produto prod9 = new Produto(9, "Papa s/ Glúten", 13.0f, false, validadesQuantidades9, "Papa sem Glúten", "HA", "Hipoalergenico");
-            Produto prod10 = new Produto(10, "Papa s/ Amido", 14.0f, false, validadesQuantidades10, "Papa sem Amido", "HA", "Hipoalergenico");
-            Produto prod11 = new Produto(11, "Scalibor", 15.0f, false, validadesQuantidades11, "Desparazitante de animal", "HA", "Animal");
-            Produto prod12 = new Produto(12, "Amflee", 16.0f, false, validadesQuantidades12, "Desparazitante de animal", "HA", "Animal");
-            Produto prod13 = new Produto(13, "Dove", 17.0f, false, validadesQuantidades13, "Creme hedratante", "B", "Beleza");
-            Produto prod14 = new Produto(14, "Nivea", 18.0f, false, validadesQuantidades14, "Creme hedratante", "B", "Beleza");
+            Opiacio prod1 = new Opiacio(1, "Benuron", 5.00f, true, validadesQuantidades1, "Opiácio", "M", "Opiacio");
+            Opiacio prod2 = new Opiacio(2, "Brufen", 6.00f, true, validadesQuantidades2, "Opiácio", "M", "Opiacio");
+            AntiInflamatorio_AntiSeptico prod3 = new AntiInflamatorio_AntiSeptico(3, "Antiflan", 7.00f, true, validadesQuantidades3, "Anti-Inflamatório", "M", "AntiInflamatorio_AntiSeptico");
+            AntiInflamatorio_AntiSeptico prod4 = new AntiInflamatorio_AntiSeptico(4, "Ceprofen", 8.00f, true, validadesQuantidades4, "Anti-Inflamatório", "M", "AntiInflamatorio_AntiSeptico");
+            Injecao prod5 = new Injecao(5, "Vacina", 9.00f, true, validadesQuantidades5, "Injeções", "M", "Injecao");
+            Injecao prod6 = new Injecao(6, "Noregyna", 10.00f, true, validadesQuantidades6, "Injeções", "M", "Injecao");
+            Higiene prod7 = new Higiene(7, "Colgate", 11.00f, false, validadesQuantidades7, "Pasta de Dentes", "HA", "Higiene");
+            Higiene prod8 = new Higiene(8, "Linic", 12.00f, false, validadesQuantidades8, "Champô", "HA", "Higiene");
+            Hipoalergenico prod9 = new Hipoalergenico(9, "Papa s/ Glúten", 13.00f, false, validadesQuantidades9, "Papa sem Glúten", "HA", "Hipoalergenico");
+            Hipoalergenico prod10 = new Hipoalergenico(10, "Papa s/ Amido", 14.00f, false, validadesQuantidades10, "Papa sem Amido", "HA", "Hipoalergenico");
+            Animal prod11 = new Animal(11, "Scalibor", 15.00f, false, validadesQuantidades11, "Desparazitante de animal", "HA", "Animal");
+            Animal prod12 = new Animal(12, "Amflee", 16.00f, false, validadesQuantidades12, "Desparazitante de animal", "HA", "Animal");
+            Beleza prod13 = new Beleza(13, "Dove", 17.00f, false, validadesQuantidades13, "Creme hedratante", "B", "Beleza");
+            Beleza prod14 = new Beleza(14, "Nivea", 18.00f, false, validadesQuantidades14, "Creme hedratante", "B", "Beleza");
 
             List<Produto> produtos = new List<Produto>();
             produtos.Add(prod1);
@@ -1447,13 +1656,13 @@ namespace LP_TP1F2_Farmacia
             List<ValidadeQuantidade> validadesQuantidadesReceita = new List<ValidadeQuantidade>();
             validadesQuantidadesReceita.Add(validadeQuantidadeReceita);
 
-            Produto prod1Receita = new Produto(1, "Benuron", 5.0f, true, validadesQuantidadesReceita, "Opiácio", "M", "Opiacio");
-            Produto prod2Receita = new Produto(3, "Antiflan", 7.0f, true, validadesQuantidadesReceita, "Anti-Inflamatório", "M", "AntiInflamatorio");
-            Produto prod3Receita = new Produto(5, "Vacina", 9.0f, true, validadesQuantidadesReceita, "Injeções", "M", "Injecao");
-            Produto prod4Receita = new Produto(7, "Colgate", 11.0f, false, validadesQuantidadesReceita, "Pasta de Dentes", "HA", "Higiene");
-            Produto prod5Receita = new Produto(9, "Papa s/ Glúten", 13.0f, false, validadesQuantidadesReceita, "Papa sem Glúten", "HA", "Hipoalergenico");
-            Produto prod6Receita = new Produto(11, "Scalibor", 15.0f, false, validadesQuantidadesReceita, "Desparazitante de animal", "HA", "Animal");
-            Produto prod7Receita = new Produto(13, "Dove", 17.0f, false, validadesQuantidadesReceita, "Creme hedratante", "B", "Beleza");
+            Opiacio prod1Receita = new Opiacio(1, "Benuron", 5.00f, true, validadesQuantidadesReceita, "Opiácio", "M", "Opiacio");
+            AntiInflamatorio_AntiSeptico prod2Receita = new AntiInflamatorio_AntiSeptico(3, "Antiflan", 7.00f, true, validadesQuantidadesReceita, "Anti-Inflamatório", "M", "AntiInflamatorio_AntiSeptico");
+            Injecao prod3Receita = new Injecao(5, "Vacina", 9.00f, true, validadesQuantidadesReceita, "Injeções", "M", "Injecao");
+            Higiene prod4Receita = new Higiene(7, "Colgate", 11.00f, false, validadesQuantidadesReceita, "Pasta de Dentes", "HA", "Higiene");
+            Hipoalergenico prod5Receita = new Hipoalergenico(9, "Papa s/ Glúten", 13.00f, false, validadesQuantidadesReceita, "Papa sem Glúten", "HA", "Hipoalergenico");
+            Animal prod6Receita = new Animal(11, "Scalibor", 15.00f, false, validadesQuantidadesReceita, "Desparazitante de animal", "HA", "Animal");
+            Beleza prod7Receita = new Beleza(13, "Dove", 17.00f, false, validadesQuantidadesReceita, "Creme hedratante", "B", "Beleza");
             List<Produto> produtosReceita = new List<Produto>();
             produtosReceita.Add(prod1Receita);
             produtosReceita.Add(prod2Receita);
@@ -1481,11 +1690,11 @@ namespace LP_TP1F2_Farmacia
 
             Queue<PreVenda> filaAtendimento = new Queue<PreVenda>();
 
-            escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
-            escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
-            */
-            Farmacia farmacia = lerFarmaciaFicheiro(caminhoFarmacia);
-            Queue<PreVenda> filaAtendimento = lerFilaAtendimentoFicheiro(caminhoFilaAtendimento);
+            //escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+            //escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
+            
+            //Farmacia farmacia = lerFarmaciaFicheiro(caminhoFarmacia);
+            //Queue<PreVenda> filaAtendimento = lerFilaAtendimentoFicheiro(caminhoFilaAtendimento);
 
             Cliente clienteAtual = null;
             Funcionario funcionarioAtual = null;
@@ -1593,8 +1802,8 @@ namespace LP_TP1F2_Farmacia
                                         if (farmacia.existeQuantidade(idProdutoInt, quantidadeProdutoInt))
                                         {
                                             Produto prod = farmacia.obterProduto(idProdutoInt);
-                                            Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
-                                            encomenda.Add(prodTemp);
+                                            //Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                            //encomenda.Add(prodTemp);
                                             Console.WriteLine("\nProduto adicionado com sucesso.");
                                             while (Console.KeyAvailable)
                                             {
@@ -1722,8 +1931,8 @@ namespace LP_TP1F2_Farmacia
                                                     ValidadeQuantidade vq = new ValidadeQuantidade(quantidadeProdutoInt, dataVQ);
                                                     List<ValidadeQuantidade> lvq = new List<ValidadeQuantidade>();
                                                     lvq.Add(vq);
-                                                    Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
-                                                    devolucao.Add(prodTemp);
+                                                    //Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                    //devolucao.Add(prodTemp);
                                                     Console.WriteLine("\nProduto adicionado com sucesso para devolução.");
                                                     while (Console.KeyAvailable)
                                                     {
@@ -1831,7 +2040,7 @@ namespace LP_TP1F2_Farmacia
                     case "7":
                         {
                             Console.Clear();
-                            if (funcionarioAtual == null)
+                            if (clienteAtual == null) //Colocar funcionarioAtual
                             {
                                 Console.WriteLine("Não tem permissão para usar esta função.");
                             }
@@ -1842,7 +2051,7 @@ namespace LP_TP1F2_Farmacia
                                 Cliente clienteQueCompra = farmacia.obterCliente(proximo.IdCliente);
                                 Console.WriteLine("Id do cliente: " + clienteQueCompra.Id);
                                 Console.WriteLine("Nome do cliente: " + clienteQueCompra.Nome);
-                                Console.WriteLine("Produtos encomendados:\n");
+                                Console.WriteLine("\nProdutos encomendados:\n");
                                 float total = 0;
                                 foreach (Produto produto in proximo.Encomenda)
                                 {
@@ -1852,61 +2061,8 @@ namespace LP_TP1F2_Farmacia
                                     {
                                         quantidade += validadeQuantidade.Quantidade;
                                     }
-                                    if ((produto.SubCategoria == "AntiInflamatorio") || (produto.SubCategoria == "AntiSeptico"))
-                                    {
-                                        precoTemp = produto.Preco;
-                                        precoTemp += produto.Preco * 0.01f;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
-                                    else if (produto.SubCategoria == "Injecao")
-                                    {
-                                        precoTemp = produto.Preco;
-                                        precoTemp += 1;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
-                                    else if (produto.SubCategoria == "Higiene")
-                                    {
-                                        precoTemp = produto.Preco;
-                                        precoTemp += produto.Preco * 0.13f;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
-                                    else if (produto.SubCategoria == "Hipoalergenico")
-                                    {
-                                        precoTemp = produto.Preco;
-                                        precoTemp += produto.Preco * 0.06f;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
-                                    else if (produto.SubCategoria == "Animal")
-                                    {
-                                        precoTemp = produto.Preco;
-                                        precoTemp += 1;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
-                                    else if (produto.SubCategoria == "Beleza")
-                                    {
-                                        precoTemp = produto.Preco;
-                                        precoTemp += produto.Preco * 0.23f;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
-                                    else
-                                    {
-                                        precoTemp = produto.Preco;
-                                        if (proximo.IsReceita && produto.Comparticipacao) { precoTemp -= produto.Preco * 0.05f; }
-                                        if (clienteQueCompra.CartaoFarmacias) { precoTemp -= produto.Preco * 0.05f; }
-                                        total += precoTemp * quantidade;
-                                    }
+                                    total += produto.calculaPrecoSemMudar(quantidade, proximo.IsReceita, clienteQueCompra.CartaoFarmacias);
+                                    //ARRANJAR MANEIRA DE OBTER O precoTemp
                                     Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + precoTemp + " euros - " + quantidade + " unidades");
                                 }
                                 Console.WriteLine("\nTOTAL: " + total + " euros");
