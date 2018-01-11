@@ -465,7 +465,7 @@ namespace LP_TP1F2_Farmacia
             precoFinal += Preco * 0.01f;
             if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
             if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
-            precoFinal = Preco * quantidadeProduto;
+            precoFinal = precoFinal * quantidadeProduto;
             return precoFinal;
         }
     }
@@ -508,7 +508,7 @@ namespace LP_TP1F2_Farmacia
             precoFinal += 1;
             if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
             if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
-            precoFinal = Preco * quantidadeProduto;
+            precoFinal = precoFinal * quantidadeProduto;
             return precoFinal;
         }
     }
@@ -551,7 +551,7 @@ namespace LP_TP1F2_Farmacia
             precoFinal += Preco * 0.13f;
             if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
             if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
-            precoFinal = Preco * quantidadeProduto;
+            precoFinal = precoFinal * quantidadeProduto;
             return precoFinal;
         }
     }
@@ -594,7 +594,7 @@ namespace LP_TP1F2_Farmacia
             precoFinal += Preco * 0.06f;
             if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
             if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
-            precoFinal = Preco * quantidadeProduto;
+            precoFinal = precoFinal * quantidadeProduto;
             return precoFinal;
         }
     }
@@ -637,7 +637,7 @@ namespace LP_TP1F2_Farmacia
             precoFinal += 1;
             if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
             if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
-            precoFinal = Preco * quantidadeProduto;
+            precoFinal = precoFinal * quantidadeProduto;
             return precoFinal;
         }
     }
@@ -680,7 +680,7 @@ namespace LP_TP1F2_Farmacia
             precoFinal += Preco * 0.23f;
             if (isReceita && Comparticipacao) { precoFinal -= Preco * 0.05f; }
             if (cartaoFarmacias) { precoFinal -= Preco * 0.05f; }
-            precoFinal = Preco * quantidadeProduto;
+            precoFinal = precoFinal * quantidadeProduto;
             return precoFinal;
         }
     }
@@ -1316,7 +1316,7 @@ namespace LP_TP1F2_Farmacia
             /// <summary>
             /// Lê toda a Farmácia dum ficheiro
             /// </summary>
-            /*Farmacia lerFarmaciaFicheiro(string nomeFicheiro)
+            Farmacia lerFarmaciaFicheiro(string nomeFicheiro)
             {
                 StreamReader streamReader;
                 string linha;
@@ -1373,8 +1373,51 @@ namespace LP_TP1F2_Farmacia
                                             ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
                                             validadesQuantidadesProduto.Add(validadeQuantidadeLida);
                                         }
-                                        Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
-                                        produtosReceitaF.Add(produtoLido);
+                                        switch (subCategoriaProduto)
+                                        {
+                                            case "Opiacio":
+                                                {
+                                                    Opiacio produtoLido = new Opiacio(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                            case "AntiInflamatorio_AntiSeptico":
+                                                {
+                                                    AntiInflamatorio_AntiSeptico produtoLido = new AntiInflamatorio_AntiSeptico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                            case "Injecao":
+                                                {
+                                                    Injecao produtoLido = new Injecao(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                            case "Higiene":
+                                                {
+                                                    Higiene produtoLido = new Higiene(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                            case "Hipoalergenico":
+                                                {
+                                                    Hipoalergenico produtoLido = new Hipoalergenico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                            case "Animal":
+                                                {
+                                                    Animal produtoLido = new Animal(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                            case "Beleza":
+                                                {
+                                                    Beleza produtoLido = new Beleza(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                    produtosReceitaF.Add(produtoLido);
+                                                    break;
+                                                }
+                                        }
                                     }
                                     Receita receitaLida = new Receita(codigoReceita, produtosReceitaF, entregueReceita);
                                     receitasCliente.Add(receitaLida);
@@ -1416,8 +1459,51 @@ namespace LP_TP1F2_Farmacia
                                     ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
                                     validadesQuantidadesProduto.Add(validadeQuantidadeLida);
                                 }
-                                Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
-                                produtosFarmacia.Add(produtoLido);
+                                switch (subCategoriaProduto)
+                                {
+                                    case "Opiacio":
+                                        {
+                                            Opiacio produtoLido = new Opiacio(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "AntiInflamatorio_AntiSeptico":
+                                        {
+                                            AntiInflamatorio_AntiSeptico produtoLido = new AntiInflamatorio_AntiSeptico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Injecao":
+                                        {
+                                            Injecao produtoLido = new Injecao(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Higiene":
+                                        {
+                                            Higiene produtoLido = new Higiene(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Hipoalergenico":
+                                        {
+                                            Hipoalergenico produtoLido = new Hipoalergenico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Animal":
+                                        {
+                                            Animal produtoLido = new Animal(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Beleza":
+                                        {
+                                            Beleza produtoLido = new Beleza(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFarmacia.Add(produtoLido);
+                                            break;
+                                        }
+                                }
                             }
                         }
                         int auxQuantVendas = int.Parse(streamReader.ReadLine());
@@ -1449,8 +1535,51 @@ namespace LP_TP1F2_Farmacia
                                         ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
                                         validadesQuantidadesProduto.Add(validadeQuantidadeLida);
                                     }
-                                    Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
-                                    produtosVenda.Add(produtoLido);
+                                    switch (subCategoriaProduto)
+                                    {
+                                        case "Opiacio":
+                                            {
+                                                Opiacio produtoLido = new Opiacio(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                        case "AntiInflamatorio_AntiSeptico":
+                                            {
+                                                AntiInflamatorio_AntiSeptico produtoLido = new AntiInflamatorio_AntiSeptico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                        case "Injecao":
+                                            {
+                                                Injecao produtoLido = new Injecao(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                        case "Higiene":
+                                            {
+                                                Higiene produtoLido = new Higiene(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                        case "Hipoalergenico":
+                                            {
+                                                Hipoalergenico produtoLido = new Hipoalergenico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                        case "Animal":
+                                            {
+                                                Animal produtoLido = new Animal(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                        case "Beleza":
+                                            {
+                                                Beleza produtoLido = new Beleza(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                                produtosVenda.Add(produtoLido);
+                                                break;
+                                            }
+                                    }
                                 }
                                 Venda vendaLida = new Venda(idVenda, idClienteVenda, produtosVenda, totalPagoVenda, isReceitaVenda);
                                 vendasFarmacia.Add(vendaLida);
@@ -1466,7 +1595,6 @@ namespace LP_TP1F2_Farmacia
                 Farmacia farmaciaFicheiro = new Farmacia(funcionariosFarmacia, clientesFarmacia, produtosFarmacia, contadorVendasFarmacia, vendasFarmacia, dinheiroFarmacia, dataFarmacia, causaAnimalFarmacia);
                 return farmaciaFicheiro;
             }
-            */
 
             /// <summary>
             /// Escreve toda a Fila de Atendimento num ficheiro
@@ -1510,7 +1638,7 @@ namespace LP_TP1F2_Farmacia
             /// <summary>
             /// Lê toda a Fila de Atendimento dum ficheiro
             /// </summary>
-            /*Queue<PreVenda> lerFilaAtendimentoFicheiro(string nomeFicheiro)
+            Queue<PreVenda> lerFilaAtendimentoFicheiro(string nomeFicheiro)
             {
                 StreamReader streamReader;
                 string linha;
@@ -1544,8 +1672,51 @@ namespace LP_TP1F2_Farmacia
                                     ValidadeQuantidade validadeQuantidadeLida = new ValidadeQuantidade(quantidadeValidadeQuantidade, validadeValidadeQuantidade);
                                     validadesQuantidadesProduto.Add(validadeQuantidadeLida);
                                 }
-                                Produto produtoLido = new Produto(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
-                                produtosFA.Add(produtoLido);
+                                switch (subCategoriaProduto)
+                                {
+                                    case "Opiacio":
+                                        {
+                                            Opiacio produtoLido = new Opiacio(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "AntiInflamatorio_AntiSeptico":
+                                        {
+                                            AntiInflamatorio_AntiSeptico produtoLido = new AntiInflamatorio_AntiSeptico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Injecao":
+                                        {
+                                            Injecao produtoLido = new Injecao(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Higiene":
+                                        {
+                                            Higiene produtoLido = new Higiene(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Hipoalergenico":
+                                        {
+                                            Hipoalergenico produtoLido = new Hipoalergenico(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Animal":
+                                        {
+                                            Animal produtoLido = new Animal(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                    case "Beleza":
+                                        {
+                                            Beleza produtoLido = new Beleza(idProduto, nomeProduto, precoProduto, comparticipacaoProduto, validadesQuantidadesProduto, descricaoProduto, categoriaProduto, subCategoriaProduto);
+                                            produtosFA.Add(produtoLido);
+                                            break;
+                                        }
+                                }
                             }
                         }
                         PreVenda preVendaLida = new PreVenda(idClienteFA, produtosFA, isReceitaFA);
@@ -1559,13 +1730,12 @@ namespace LP_TP1F2_Farmacia
                 }
                 return filaAtendimentoFicheiro;
             }
-            */
 
             string diretorioAtual = Directory.GetCurrentDirectory();
             string caminhoFarmacia = diretorioAtual + "/farmacia.txt";
             string caminhoFilaAtendimento = diretorioAtual + "/filaAtendimento.txt";
 
-            
+            /*
             Funcionario func1 = new Funcionario("Chefe", 1, "Toninho");
             Funcionario func2 = new Funcionario("Base", 2, "Hédinho");
             Funcionario func3 = new Funcionario("Base", 3, "Carlinhos");
@@ -1690,11 +1860,12 @@ namespace LP_TP1F2_Farmacia
 
             Queue<PreVenda> filaAtendimento = new Queue<PreVenda>();
 
-            //escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
-            //escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
+            escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+            escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
+            */
             
-            //Farmacia farmacia = lerFarmaciaFicheiro(caminhoFarmacia);
-            //Queue<PreVenda> filaAtendimento = lerFilaAtendimentoFicheiro(caminhoFilaAtendimento);
+            Farmacia farmacia = lerFarmaciaFicheiro(caminhoFarmacia);
+            Queue<PreVenda> filaAtendimento = lerFilaAtendimentoFicheiro(caminhoFilaAtendimento);
 
             Cliente clienteAtual = null;
             Funcionario funcionarioAtual = null;
@@ -1802,8 +1973,51 @@ namespace LP_TP1F2_Farmacia
                                         if (farmacia.existeQuantidade(idProdutoInt, quantidadeProdutoInt))
                                         {
                                             Produto prod = farmacia.obterProduto(idProdutoInt);
-                                            //Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
-                                            //encomenda.Add(prodTemp);
+                                            switch (prod.SubCategoria)
+                                            {
+                                                case "Opiacio":
+                                                    {
+                                                        Opiacio prodTemp = new Opiacio(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                                case "AntiInflamatorio_AntiSeptico":
+                                                    {
+                                                        AntiInflamatorio_AntiSeptico prodTemp = new AntiInflamatorio_AntiSeptico(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                                case "Injecao":
+                                                    {
+                                                        Injecao prodTemp = new Injecao(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                                case "Higiene":
+                                                    {
+                                                        Higiene prodTemp = new Higiene(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                                case "Hipoalergenico":
+                                                    {
+                                                        Hipoalergenico prodTemp = new Hipoalergenico(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                                case "Animal":
+                                                    {
+                                                        Animal prodTemp = new Animal(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                                case "Beleza":
+                                                    {
+                                                        Beleza prodTemp = new Beleza(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, farmacia.ValidadeQuantidadeParaCompra(idProdutoInt, quantidadeProdutoInt), prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                        encomenda.Add(prodTemp);
+                                                        break;
+                                                    }
+                                            }
                                             Console.WriteLine("\nProduto adicionado com sucesso.");
                                             while (Console.KeyAvailable)
                                             {
@@ -1931,8 +2145,51 @@ namespace LP_TP1F2_Farmacia
                                                     ValidadeQuantidade vq = new ValidadeQuantidade(quantidadeProdutoInt, dataVQ);
                                                     List<ValidadeQuantidade> lvq = new List<ValidadeQuantidade>();
                                                     lvq.Add(vq);
-                                                    //Produto prodTemp = new Produto(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
-                                                    //devolucao.Add(prodTemp);
+                                                    switch (prod.SubCategoria)
+                                                    {
+                                                        case "Opiacio":
+                                                            {
+                                                                Opiacio prodTemp = new Opiacio(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                        case "AntiInflamatorio_AntiSeptico":
+                                                            {
+                                                                AntiInflamatorio_AntiSeptico prodTemp = new AntiInflamatorio_AntiSeptico(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                        case "Injecao":
+                                                            {
+                                                                Injecao prodTemp = new Injecao(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                        case "Higiene":
+                                                            {
+                                                                Higiene prodTemp = new Higiene(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                        case "Hipoalergenico":
+                                                            {
+                                                                Hipoalergenico prodTemp = new Hipoalergenico(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                        case "Animal":
+                                                            {
+                                                                Animal prodTemp = new Animal(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                        case "Beleza":
+                                                            {
+                                                                Beleza prodTemp = new Beleza(prod.Id, prod.Nome, prod.Preco, prod.Comparticipacao, lvq, prod.Descrição, prod.Categoria, prod.SubCategoria);
+                                                                devolucao.Add(prodTemp);
+                                                                break;
+                                                            }
+                                                    }
                                                     Console.WriteLine("\nProduto adicionado com sucesso para devolução.");
                                                     while (Console.KeyAvailable)
                                                     {
@@ -2035,51 +2292,62 @@ namespace LP_TP1F2_Farmacia
                                     escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
                                 }
                             }
+                            while (Console.KeyAvailable)
+                            {
+                                Console.ReadKey(false);
+                            }
+                            Console.ReadKey();
                             break;
                         }
                     case "7":
                         {
                             Console.Clear();
-                            if (clienteAtual == null) //Colocar funcionarioAtual
+                            if (funcionarioAtual == null)
                             {
                                 Console.WriteLine("Não tem permissão para usar esta função.");
                             }
                             else
                             {
-                                Console.WriteLine("PRÓXIMO CLIENTE\n");
-                                PreVenda proximo = filaAtendimento.Peek();
-                                Cliente clienteQueCompra = farmacia.obterCliente(proximo.IdCliente);
-                                Console.WriteLine("Id do cliente: " + clienteQueCompra.Id);
-                                Console.WriteLine("Nome do cliente: " + clienteQueCompra.Nome);
-                                Console.WriteLine("\nProdutos encomendados:\n");
-                                float total = 0;
-                                foreach (Produto produto in proximo.Encomenda)
+                                if(filaAtendimento.Count > 0)
                                 {
-                                    int quantidade = 0;
-                                    float precoTemp;
-                                    foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                                    Console.WriteLine("PRÓXIMO CLIENTE\n");
+                                    PreVenda proximo = filaAtendimento.Peek();
+                                    Cliente clienteQueCompra = farmacia.obterCliente(proximo.IdCliente);
+                                    Console.WriteLine("Id do cliente: " + clienteQueCompra.Id);
+                                    Console.WriteLine("Nome do cliente: " + clienteQueCompra.Nome);
+                                    Console.WriteLine("\nProdutos encomendados:\n");
+                                    float total = 0;
+                                    foreach (Produto produto in proximo.Encomenda)
                                     {
-                                        quantidade += validadeQuantidade.Quantidade;
+                                        int quantidade = 0;
+                                        float precoTemp;
+                                        foreach (ValidadeQuantidade validadeQuantidade in produto.ValidadesQuantidades)
+                                        {
+                                            quantidade += validadeQuantidade.Quantidade;
+                                        }
+                                        total += precoTemp = produto.calculaPrecoSemMudar(quantidade, proximo.IsReceita, clienteQueCompra.CartaoFarmacias);
+                                        Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + precoTemp / quantidade + " euros - " + quantidade + " unidades");
                                     }
-                                    total += produto.calculaPrecoSemMudar(quantidade, proximo.IsReceita, clienteQueCompra.CartaoFarmacias);
-                                    //ARRANJAR MANEIRA DE OBTER O precoTemp
-                                    Console.WriteLine(produto.Id + " - " + produto.Nome + " - " + precoTemp + " euros - " + quantidade + " unidades");
-                                }
-                                Console.WriteLine("\nTOTAL: " + total + " euros");
-                                Console.Write("\nComo o cliente deseja pagar? (0 - Pagar Agora | 1 - Deixar na conta): ");
-                                string tipoPagamento = Console.ReadLine();
-                                int tipoPagamentoInt = Int32.Parse(tipoPagamento);
-                                if (tipoPagamentoInt == 0)
-                                {
-                                    farmacia.obterCliente(proximo.IdCliente).pagar(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                    Console.WriteLine("\nTOTAL: " + total + " euros");
+                                    Console.Write("\nComo o cliente deseja pagar? (0 - Pagar Agora | 1 - Deixar na conta): ");
+                                    string tipoPagamento = Console.ReadLine();
+                                    int tipoPagamentoInt = Int32.Parse(tipoPagamento);
+                                    if (tipoPagamentoInt == 0)
+                                    {
+                                        farmacia.obterCliente(proximo.IdCliente).pagar(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                    }
+                                    else
+                                    {
+                                        farmacia.obterCliente(proximo.IdCliente).adicionarConta(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                    }
+                                    filaAtendimento.Dequeue();
+                                    escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
+                                    escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
                                 }
                                 else
                                 {
-                                    farmacia.obterCliente(proximo.IdCliente).adicionarConta(farmacia, proximo.Encomenda, proximo.IsReceita);
+                                    Console.WriteLine("Não tem pessoas na fila!");
                                 }
-                                filaAtendimento.Dequeue();
-                                escreverFarmaciaFicheiro(caminhoFarmacia, farmacia);
-                                escreverFilaAtendimentoFicheiro(caminhoFilaAtendimento, filaAtendimento);
                             }
                             while (Console.KeyAvailable)
                             {
